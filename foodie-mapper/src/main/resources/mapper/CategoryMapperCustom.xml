@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsrdxzw.mapper.CategoryMapperCustom">
+
+    <resultMap id="myCategoryVO" type="com.jsrdxzw.vo.CategoryVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="fatherId" property="fatherId"/>
+        <collection property="subCatList" ofType="com.jsrdxzw.vo.SubCategoryVO">
+            <id column="subId" property="subId"/>
+            <result column="subName" property="subName"/>
+            <result column="subType" property="subType"/>
+            <result column="subFatherId" property="subFatherId"/>
+        </collection>
+    </resultMap>
+
+    <!--  三级菜单类别的自连接查询-->
+    <select id="getSubCatList" parameterType="int" resultMap="myCategoryVO">
+      SELECT
+          f.id AS id,
+          f.`name` AS `name`,
+          f.type AS type,
+          f.father_id AS fatherId,
+          c.id AS subId,
+          c.`name` AS subName,
+          c.type AS subType,
+          c.father_id AS subFatherId
+      FROM
+          category f
+      JOIN
+          category c
+      ON
+          f.id = c.father_id
+      WHERE
+          f.father_id = #{rootCatId};
+  </select>
+
+</mapper>

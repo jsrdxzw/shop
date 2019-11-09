@@ -14,8 +14,8 @@ public interface CarouselService {
     /**
      * 查询所有轮播图列表
      *
-     * @param isShow
-     * @return
+     * @param isShow 是否显示照片
+     * @return 轮播图
      */
     List<Carousel> queryAll(int isShow);
 }
