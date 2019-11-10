@@ -4,6 +4,8 @@ import com.jsrdxzw.mapper.CarouselMapper;
 import com.jsrdxzw.pojo.Carousel;
 import com.jsrdxzw.service.CarouselService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public class CarouselServiceImpl implements CarouselService {
         this.carouselMapper = carouselMapper;
     }
 
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
     @Override
     public List<Carousel> queryAll(int isShow) {
         Example example = new Example(Carousel.class);
@@ -23,7 +26,7 @@ public class CarouselServiceImpl implements CarouselService {
         example.orderBy("sort").desc();
 
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("isShow",isShow);
+        criteria.andEqualTo("isShow", isShow);
 
         return carouselMapper.selectByExample(example);
     }
