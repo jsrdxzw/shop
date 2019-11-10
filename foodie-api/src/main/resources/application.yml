@@ -41,3 +41,8 @@ mapper:
   identity: MYSQL
 logging:
   config: classpath:log4j2.xml
+
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  support-methods-arguments: true
