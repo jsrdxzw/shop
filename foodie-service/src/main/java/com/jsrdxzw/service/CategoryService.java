@@ -2,6 +2,7 @@ package com.jsrdxzw.service;
 
 import com.jsrdxzw.pojo.Category;
 import com.jsrdxzw.vo.CategoryVO;
+import com.jsrdxzw.vo.NewItemsVO;
 
 import java.util.List;
 
@@ -22,8 +23,16 @@ public interface CategoryService {
     /**
      * 根据一级分类查询子分类
      *
-     * @param rootCatId
+     * @param rootCatId 一级分类 id
      * @return
      */
     List<CategoryVO> getSubCatList(Integer rootCatId);
+
+    /**
+     * 查询首页一级分类下的最新6个数据
+     *
+     * @param rootCatId 一级分类 id
+     * @return
+     */
+    List<NewItemsVO> getSixNewItems(Integer rootCatId);
 }

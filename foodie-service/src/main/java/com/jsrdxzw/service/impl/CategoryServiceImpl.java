@@ -5,11 +5,13 @@ import com.jsrdxzw.mapper.CategoryMapperCustom;
 import com.jsrdxzw.pojo.Category;
 import com.jsrdxzw.service.CategoryService;
 import com.jsrdxzw.vo.CategoryVO;
+import com.jsrdxzw.vo.NewItemsVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,5 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryVO> getSubCatList(Integer rootCatId) {
         return categoryMapperCustom.getSubCatList(rootCatId);
+    }
+
+    @Override
+    public List<NewItemsVO> getSixNewItems(Integer rootCatId) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("rootCatId", rootCatId);
+
+        return categoryMapperCustom.getSixNewItems(map);
     }
 }

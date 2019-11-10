@@ -1,8 +1,11 @@
 package com.jsrdxzw.mapper;
 
 import com.jsrdxzw.vo.CategoryVO;
+import com.jsrdxzw.vo.NewItemsVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: xuzhiwei
@@ -11,4 +14,10 @@ import java.util.List;
  */
 public interface CategoryMapperCustom{
     List<CategoryVO> getSubCatList(int rootCatId);
+
+    /**
+     * @param map 传入的查询参数
+     * @return
+     */
+    List<NewItemsVO> getSixNewItems(@Param("paramsMap") Map<String, Object> map);
 }
