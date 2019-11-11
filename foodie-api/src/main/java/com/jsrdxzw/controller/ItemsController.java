@@ -70,11 +70,11 @@ public class ItemsController extends BaseController {
     public JSONResult comments(
             @ApiParam(name = "itemId", value = "商品id", required = true)
             @RequestParam String itemId,
-            @ApiParam(name = "level", value = "评价等级", required = false)
+            @ApiParam(name = "level", value = "评价等级")
             @RequestParam Integer level,
-            @ApiParam(name = "page", value = "查询下一页的第几页", required = false)
+            @ApiParam(name = "page", value = "查询下一页的第几页")
             @RequestParam Integer page,
-            @ApiParam(name = "pageSize", value = "分页的每一页显示的条数", required = false)
+            @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
             @RequestParam Integer pageSize) {
 
         if (StringUtils.isBlank(itemId)) {
@@ -86,13 +86,68 @@ public class ItemsController extends BaseController {
         }
 
         if (pageSize == null) {
-            pageSize = COMMON_PAGE_SIZE;
+            pageSize = COMMENT_PAGE_SIZE;
         }
 
-        PagedGridResult grid = itemService.queryPagedComments(itemId,
-                level,
-                page,
-                pageSize);
+        PagedGridResult grid = itemService.queryPagedComments(itemId, level, page, pageSize);
+
+        return JSONResult.ok(grid);
+    }
+
+    @ApiOperation(value = "搜索商品列表", notes = "搜索商品列表", httpMethod = "GET")
+    @GetMapping("/search")
+    public JSONResult search(
+            @ApiParam(name = "keywords", value = "搜索关键词", required = true)
+            @RequestParam String keywords,
+            @ApiParam(name = "sort", value = "排序")
+            @RequestParam String sort,
+            @ApiParam(name = "page", value = "查询下一页的第几页")
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
+            @RequestParam Integer pageSize) {
+
+        if (StringUtils.isBlank(keywords)) {
+            return JSONResult.errorMsg("");
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedGridResult grid = itemService.searchItems(keywords, sort, page, pageSize);
+
+        return JSONResult.ok(grid);
+    }
+
+    @ApiOperation(value = "通过分类id搜索商品列表", notes = "通过分类id搜索商品列表", httpMethod = "GET")
+    @GetMapping("/catItems")
+    public JSONResult catItems(
+            @ApiParam(name = "catId", value = "三级分类id", required = true)
+            @RequestParam Integer catId,
+            @ApiParam(name = "sort", value = "排序")
+            @RequestParam String sort,
+            @ApiParam(name = "page", value = "查询下一页的第几页")
+            @RequestParam Integer page,
+            @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
+            @RequestParam Integer pageSize) {
+
+        if (catId == null) {
+            return JSONResult.errorMsg("");
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedGridResult grid = itemService.searchItems(catId, sort, page, pageSize);
 
         return JSONResult.ok(grid);
     }

@@ -48,9 +48,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<NewItemsVO> getSixNewItems(Integer rootCatId) {
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>(1);
         map.put("rootCatId", rootCatId);
-
         return categoryMapperCustom.getSixNewItems(map);
     }
 }

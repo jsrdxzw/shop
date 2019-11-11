@@ -6,6 +6,6 @@ package com.jsrdxzw.controller;
  * @Description:
  */
 public class BaseController {
-    static final Integer COMMON_PAGE_SIZE = 10;
+    static final Integer COMMENT_PAGE_SIZE = 10;
     static final Integer PAGE_SIZE = 20;
 }

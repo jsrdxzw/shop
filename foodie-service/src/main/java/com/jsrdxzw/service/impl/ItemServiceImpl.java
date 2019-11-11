@@ -10,6 +10,7 @@ import com.jsrdxzw.utils.DesensitizationUtil;
 import com.jsrdxzw.utils.PagedGridResult;
 import com.jsrdxzw.vo.CommentLevelCountsVO;
 import com.jsrdxzw.vo.ItemCommentVO;
+import com.jsrdxzw.vo.searchItemsVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
     @Override
     public PagedGridResult queryPagedComments(String itemId, Integer level, Integer page, Integer pageSize) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(1);
         map.put("itemId", itemId);
         map.put("level", level);
 
@@ -107,6 +108,30 @@ public class ItemServiceImpl implements ItemService {
         for (ItemCommentVO vo : list) {
             vo.setNickname(DesensitizationUtil.commonDisplay(vo.getNickname()));
         }
+
+        return setterPagedGrid(list, page);
+    }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<searchItemsVO> list = itemsMapperCustom.searchItems(map);
+
+        return setterPagedGrid(list, page);
+    }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItems(Integer catId, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("catId", catId);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<searchItemsVO> list = itemsMapperCustom.searchItemsByThirdCat(map);
 
         return setterPagedGrid(list, page);
     }

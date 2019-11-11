@@ -1,6 +1,7 @@
 package com.jsrdxzw.mapper;
 
 import com.jsrdxzw.vo.ItemCommentVO;
+import com.jsrdxzw.vo.searchItemsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,5 +13,9 @@ import java.util.Map;
  * @Description:
  */
 public interface ItemsMapperCustom {
-    public List<ItemCommentVO> queryItemComments(@Param("paramsMap") Map<String, Object> map);
+    List<ItemCommentVO> queryItemComments(@Param("paramsMap") Map<String, Object> map);
+
+    List<searchItemsVO> searchItems(@Param("paramsMap") Map<String, Object> map);
+
+    List<searchItemsVO> searchItemsByThirdCat(@Param("paramsMap") Map<String, Object> map);
 }
