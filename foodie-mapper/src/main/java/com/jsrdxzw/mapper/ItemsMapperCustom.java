@@ -1,6 +1,7 @@
 package com.jsrdxzw.mapper;
 
 import com.jsrdxzw.vo.ItemCommentVO;
+import com.jsrdxzw.vo.ShopCartVO;
 import com.jsrdxzw.vo.searchItemsVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,4 +19,7 @@ public interface ItemsMapperCustom {
     List<searchItemsVO> searchItems(@Param("paramsMap") Map<String, Object> map);
 
     List<searchItemsVO> searchItemsByThirdCat(@Param("paramsMap") Map<String, Object> map);
+
+    List<ShopCartVO> queryItemsBySpecIds(@Param("paramsList") List<String> specIds);
+
 }

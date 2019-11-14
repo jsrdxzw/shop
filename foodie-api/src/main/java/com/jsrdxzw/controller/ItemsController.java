@@ -152,4 +152,22 @@ public class ItemsController extends BaseController {
         return JSONResult.ok(grid);
     }
 
+    /**
+     * 刷新购物车的数据，防止价格更新等等
+     *
+     * @param itemSpecIds
+     * @return
+     */
+    @ApiOperation(value = "根据商品规格查找最新的商品数据", notes = "根据商品规格查找最新的商品数据", httpMethod = "GET")
+    @GetMapping("/refresh")
+    public JSONResult refresh(
+            @ApiParam(name = "itemSpecIds", value = "拼接的规格ids", example = "1001,1003,1005")
+            @RequestParam String itemSpecIds
+    ) {
+        if (StringUtils.isBlank(itemSpecIds)) {
+            return JSONResult.ok();
+        }
+        return JSONResult.ok(itemService.queryItemsBySpecIds(itemSpecIds));
+    }
+
 }

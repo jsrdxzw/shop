@@ -20,4 +20,5 @@ public interface CategoryMapperCustom{
      * @return
      */
     List<NewItemsVO> getSixNewItems(@Param("paramsMap") Map<String, Object> map);
+
 }
