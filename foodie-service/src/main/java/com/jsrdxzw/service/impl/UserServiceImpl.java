@@ -15,7 +15,6 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Author: xuzhiwei
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
         return shopUser != null;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     @Override
     public ShopUser createUser(UserBO userBO) {
         ShopUser user = new ShopUser();
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
     public ShopUser queryUserForLogin(String username, String password) {
         Example example = new Example(ShopUser.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("username",username).andEqualTo("password",password);
+        criteria.andEqualTo("username", username).andEqualTo("password", password);
         return userMapper.selectOneByExample(example);
     }
 }

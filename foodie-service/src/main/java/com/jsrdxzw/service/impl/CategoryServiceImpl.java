@@ -46,6 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapperCustom.getSubCatList(rootCatId);
     }
 
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
     @Override
     public List<NewItemsVO> getSixNewItems(Integer rootCatId) {
         HashMap<String, Object> map = new HashMap<>(1);

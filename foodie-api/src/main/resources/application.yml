@@ -1,8 +1,6 @@
 server:
   port: 8088
   max-http-header-size: 80KB
-  servlet:
-    context-path: /foodie-dev-api
 
 ############################################################
 #
