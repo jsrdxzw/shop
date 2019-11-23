@@ -3,6 +3,7 @@ package com.jsrdxzw.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jsrdxzw.enums.CommentLevel;
+import com.jsrdxzw.enums.YesOrNo;
 import com.jsrdxzw.mapper.*;
 import com.jsrdxzw.pojo.*;
 import com.jsrdxzw.service.ItemService;
@@ -146,6 +147,35 @@ public class ItemServiceImpl implements ItemService {
         return itemsMapperCustom.queryItemsBySpecIds(specIdsList);
     }
 
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
+    @Override
+    public ItemsSpec queryItemSpecById(String specId) {
+        return itemsSpecMapper.selectByPrimaryKey(specId);
+    }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
+    @Override
+    public String queryItemMainImgById(String itemId) {
+        ItemsImg itemsImg = new ItemsImg();
+        itemsImg.setItemId(itemId);
+        itemsImg.setIsMain(YesOrNo.YES.type);
+        ItemsImg result = itemsImgMapper.selectOne(itemsImg);
+        return result != null ? result.getUrl() : "";
+    }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Override
+    public void decreaseItemStock(String specId, int buyCounts) {
+        // 防止库存会成为负数的问题
+        // synchronized 不推荐使用，集群下无用，性能不好
+        // 锁数据库，不推荐，性能地下
+        // 分布式锁 OK zookeeper redis
+        // SQL语句判断更新
+        int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
+        if (result != 1) {
+            throw new RuntimeException("库存不足, 订单创建失败");
+        }
+    }
 
     private Integer getCommentCounts(String itemId, Integer level) {
         Example example = new Example(ItemsComments.class);
