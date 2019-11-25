@@ -15,4 +15,12 @@ public interface OrderService {
      * @return
      */
     String createOrder(SubmitOrderBO submitOrderBO);
+
+    /**
+     * 修改订单状态
+     *
+     * @param orderId
+     * @param orderStatus
+     */
+    void updateOrderStatus(String orderId, Integer orderStatus);
 }

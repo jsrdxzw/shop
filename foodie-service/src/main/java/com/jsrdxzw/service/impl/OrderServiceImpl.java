@@ -120,4 +120,14 @@ public class OrderServiceImpl implements OrderService {
 
         return orderId;
     }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Override
+    public void updateOrderStatus(String orderId, Integer orderStatus) {
+        OrderStatus status = new OrderStatus();
+        status.setOrderId(orderId);
+        status.setOrderStatus(orderStatus);
+        status.setPayTime(new Date());
+        orderStatusMapper.updateByPrimaryKeySelective(status);
+    }
 }
