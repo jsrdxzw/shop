@@ -10,6 +10,8 @@ import com.jsrdxzw.pojo.*;
 import com.jsrdxzw.service.AddressService;
 import com.jsrdxzw.service.ItemService;
 import com.jsrdxzw.service.OrderService;
+import com.jsrdxzw.vo.MerchantOrderVO;
+import com.jsrdxzw.vo.OrderVO;
 import org.n3r.idworker.Sid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     @Override
-    public String createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
@@ -118,7 +120,18 @@ public class OrderServiceImpl implements OrderService {
         waitPayOrderStatus.setCreatedTime(new Date());
         orderStatusMapper.insert(waitPayOrderStatus);
 
-        return orderId;
+        // 构建商户订单，传给支付中心
+        MerchantOrderVO merchantOrderVO = new MerchantOrderVO();
+        merchantOrderVO.setMerchantOrderId(orderId);
+        merchantOrderVO.setMerchantUserId(userId);
+        merchantOrderVO.setAmount(realPayAmount + postAmount);
+        merchantOrderVO.setPayMethod(payMethod);
+
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderId(orderId);
+        orderVO.setMerchantOrderVO(merchantOrderVO);
+
+        return orderVO;
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
@@ -129,5 +142,10 @@ public class OrderServiceImpl implements OrderService {
         status.setOrderStatus(orderStatus);
         status.setPayTime(new Date());
         orderStatusMapper.updateByPrimaryKeySelective(status);
+    }
+
+    @Override
+    public OrderStatus queryOrderStatusInfo(String orderId) {
+        return orderStatusMapper.selectByPrimaryKey(orderId);
     }
 }

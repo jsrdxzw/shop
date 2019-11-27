@@ -1,6 +1,8 @@
 package com.jsrdxzw.service;
 
 import com.jsrdxzw.bo.SubmitOrderBO;
+import com.jsrdxzw.pojo.OrderStatus;
+import com.jsrdxzw.vo.OrderVO;
 
 /**
  * @Author: xuzhiwei
@@ -14,7 +16,7 @@ public interface OrderService {
      * @param submitOrderBO
      * @return
      */
-    String createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(SubmitOrderBO submitOrderBO);
 
     /**
      * 修改订单状态
@@ -23,4 +25,12 @@ public interface OrderService {
      * @param orderStatus
      */
     void updateOrderStatus(String orderId, Integer orderStatus);
+
+    /**
+     * 查询订单状态
+     *
+     * @param orderId
+     * @return
+     */
+    OrderStatus queryOrderStatusInfo(String orderId);
 }

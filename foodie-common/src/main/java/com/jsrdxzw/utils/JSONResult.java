@@ -91,6 +91,9 @@ public class JSONResult {
         this.data = data;
     }
 
+    public JSONResult() {
+    }
+
     public Boolean isOK() {
         return this.status == 200;
     }
