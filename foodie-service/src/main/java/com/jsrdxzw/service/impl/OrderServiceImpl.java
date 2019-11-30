@@ -10,6 +10,7 @@ import com.jsrdxzw.pojo.*;
 import com.jsrdxzw.service.AddressService;
 import com.jsrdxzw.service.ItemService;
 import com.jsrdxzw.service.OrderService;
+import com.jsrdxzw.utils.DateUtil;
 import com.jsrdxzw.vo.MerchantOrderVO;
 import com.jsrdxzw.vo.OrderVO;
 import org.n3r.idworker.Sid;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: xuzhiwei
@@ -144,8 +146,33 @@ public class OrderServiceImpl implements OrderService {
         orderStatusMapper.updateByPrimaryKeySelective(status);
     }
 
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
     @Override
     public OrderStatus queryOrderStatusInfo(String orderId) {
         return orderStatusMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Override
+    public void closeOrder() {
+        //判断时间是否超时，一天则关闭交易
+        OrderStatus status = new OrderStatus();
+        status.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
+        List<OrderStatus> list = orderStatusMapper.select(status);
+        for (OrderStatus orderStatus : list) {
+            Date createdTime = orderStatus.getCreatedTime();
+            int days = DateUtil.daysBetween(createdTime, new Date());
+            if (days >= 1) {
+                doCloseOrder(orderStatus.getOrderId());
+            }
+        }
+    }
+
+    private void doCloseOrder(String orderId) {
+        OrderStatus close = new OrderStatus();
+        close.setOrderId(orderId);
+        close.setOrderStatus(OrderStatusEnum.CLOSE.type);
+        close.setCloseTime(new Date());
+        orderStatusMapper.updateByPrimaryKeySelective(close);
     }
 }
