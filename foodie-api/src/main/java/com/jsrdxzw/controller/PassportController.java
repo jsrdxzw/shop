@@ -24,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 @Api(value = "注册登录", tags = {"用于注册和登录的相关接口"})
 @RestController
 @RequestMapping("/passport")
-public class PassportController {
+public class PassportController extends BaseController {
     private static final int MIN_PASSWORD_LENGTH = 6;
     private final UserService userService;
 
@@ -97,14 +97,4 @@ public class PassportController {
         return JSONResult.ok();
     }
 
-    private ShopUser userDataMasking(ShopUser user) {
-        user.setPassword(null);
-        user.setMobile(null);
-        user.setEmail(null);
-        user.setCreatedTime(null);
-        user.setUpdatedTime(null);
-        user.setBirthday(null);
-        user.setRealname(null);
-        return user;
-    }
 }

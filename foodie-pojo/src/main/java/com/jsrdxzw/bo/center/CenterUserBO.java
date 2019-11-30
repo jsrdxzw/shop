@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
@@ -60,7 +61,7 @@ public class CenterUserBO {
     @ApiModelProperty(value = "手机号", name = "mobile", example = "13999999999")
     private String mobile;
 
-    @Pattern(regexp = "^([A-Za-z0-9_\\-.])+@([A-Za-z0-9_\\-.])+\\.([A-Za-z]{2,4})$", message = "邮箱格式不正确")
+    @Email(message = "邮箱格式不正确")
     @ApiModelProperty(value = "邮箱地址", name = "email", example = "jsrdxzw@163.com")
     private String email;
 

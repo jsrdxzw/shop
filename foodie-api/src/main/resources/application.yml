@@ -8,6 +8,10 @@ server:
 #
 ############################################################
 spring:
+  servlet:
+    multipart:
+      max-file-size: 512000                           # 最大500KB
+      max-request-size: 512000
   datasource:                                         # 数据源的相关配置
     url: jdbc:mysql://localhost:3306/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root

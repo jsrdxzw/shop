@@ -19,4 +19,13 @@ public interface CenterUserService {
     ShopUser queryUserInfo(String userId);
 
     ShopUser updateUserInfo(String userId, CenterUserBO centerUserBO);
+
+    /**
+     * 更新用户头像
+     *
+     * @param userId
+     * @param faceUrl
+     * @return
+     */
+    ShopUser updateUserFace(String userId, String faceUrl);
 }

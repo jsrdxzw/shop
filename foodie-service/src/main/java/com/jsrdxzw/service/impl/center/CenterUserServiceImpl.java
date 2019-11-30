@@ -43,4 +43,15 @@ public class CenterUserServiceImpl implements CenterUserService {
         shopUserMapper.updateByPrimaryKeySelective(target);
         return queryUserInfo(userId);
     }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Override
+    public ShopUser updateUserFace(String userId, String faceUrl) {
+        ShopUser user = new ShopUser();
+        user.setId(userId);
+        user.setFace(faceUrl);
+        user.setUpdatedTime(new Date());
+        shopUserMapper.updateByPrimaryKeySelective(user);
+        return user;
+    }
 }
