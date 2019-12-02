@@ -1,7 +1,6 @@
 package com.jsrdxzw.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.jsrdxzw.enums.CommentLevel;
 import com.jsrdxzw.enums.YesOrNo;
 import com.jsrdxzw.mapper.*;
@@ -29,7 +28,7 @@ import java.util.Map;
  * @Description:
  */
 @Service
-public class ItemServiceImpl implements ItemService {
+public class ItemServiceImpl extends CommonService implements ItemService {
 
     private final ItemsMapper itemsMapper;
     private final ItemsImgMapper itemsImgMapper;
@@ -186,13 +185,4 @@ public class ItemServiceImpl implements ItemService {
         return itemsCommentsMapper.selectCountByExample(example);
     }
 
-    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(list);
-        PagedGridResult grid = new PagedGridResult();
-        grid.setPage(page);
-        grid.setRows(list);
-        grid.setTotal(pageList.getPages());
-        grid.setRecords(pageList.getTotal());
-        return grid;
-    }
 }
