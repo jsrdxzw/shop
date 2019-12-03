@@ -1,5 +1,6 @@
 package com.jsrdxzw.mapper;
 
+import com.jsrdxzw.pojo.OrderStatus;
 import com.jsrdxzw.vo.MyOrdersVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +21,8 @@ public interface OrdersMapperCustom {
      * @return
      */
     List<MyOrdersVO> queryMyOrders(@Param("paramsMap") Map<String, Object> map);
+
+    int getMyOrderStatusCounts(@Param("paramsMap") Map<String, Object> map);
+
+    List<OrderStatus> getMyOrderTrend(@Param("paramsMap") Map<String, Object> map);
 }

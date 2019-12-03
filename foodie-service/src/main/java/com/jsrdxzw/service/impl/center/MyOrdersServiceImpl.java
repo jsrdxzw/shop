@@ -12,6 +12,7 @@ import com.jsrdxzw.service.center.MyOrdersService;
 import com.jsrdxzw.service.impl.BaseService;
 import com.jsrdxzw.utils.PagedGridResult;
 import com.jsrdxzw.vo.MyOrdersVO;
+import com.jsrdxzw.vo.OrderStatusCountVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,4 +104,36 @@ public class MyOrdersServiceImpl extends BaseService implements MyOrdersService 
         return ordersMapper.updateByExampleSelective(orders, example) == 1;
     }
 
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
+    @Override
+    public OrderStatusCountVO getOrderStatusCount(String userId) {
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("userId", userId);
+        map.put("orderStatus", OrderStatusEnum.WAIT_PAY.type);
+        int waitPayCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+        map.put("orderStatus", OrderStatusEnum.WAIT_DELIVER.type);
+        int waitDeliverCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+        map.put("orderStatus", OrderStatusEnum.WAIT_RECEIVE.type);
+        int waitReceiveCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+        map.put("orderStatus", OrderStatusEnum.SUCCESS.type);
+        map.put("isComment", YesOrNo.NO.type);
+        int waitCommentCounts = ordersMapperCustom.getMyOrderStatusCounts(map);
+        OrderStatusCountVO orderStatusCountVO = new OrderStatusCountVO();
+
+        orderStatusCountVO.setWaitCommentCounts(waitCommentCounts);
+        orderStatusCountVO.setWaitDeliverCounts(waitDeliverCounts);
+        orderStatusCountVO.setWaitPayCounts(waitPayCounts);
+        orderStatusCountVO.setWaitReceiveCounts(waitReceiveCounts);
+        return orderStatusCountVO;
+    }
+
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult getMyOrderTrend(String userId, int page, int pageSize) {
+        Map<String, Object> paramsMap = new HashMap<>(1);
+        paramsMap.put("userId", userId);
+        PageHelper.startPage(page, pageSize);
+        List<OrderStatus> list = ordersMapperCustom.getMyOrderTrend(paramsMap);
+        return setterPagedGrid(list, page);
+    }
 }

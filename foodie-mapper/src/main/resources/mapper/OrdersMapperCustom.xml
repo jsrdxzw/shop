@@ -57,4 +57,33 @@
         ORDER BY od.updated_time
     </select>
 
+    <select id="getMyOrderStatusCounts" parameterType="Map" resultType="int">
+        SELECT count(*)
+        FROM orders o
+        JOIN order_status os ON o.id = os.order_id
+        WHERE o.user_id = #{paramsMap.userId}
+        AND os.order_status = #{paramsMap.orderStatus}
+        <if test="paramsMap.isComment != null">
+            AND o.is_comment = #{paramsMap.isComment}
+        </if>
+    </select>
+
+    <select id="getMyOrderTrend" parameterType="Map" resultType="com.jsrdxzw.pojo.OrderStatus">
+        SELECT os.order_id     as orderId,
+               os.order_status as orderStatus,
+               os.created_time as createdTime,
+               os.pay_time     as payTime,
+               os.deliver_time as deliverTime,
+               os.success_time as successTime,
+               os.close_time   as closeTime,
+               os.comment_time as commentTime
+        FROM orders o
+                 JOIN order_status os on o.id = os.order_id
+        WHERE o.is_delete = 0
+          AND o.user_id = #{paramsMap.userId}
+          AND os.order_status IN (20, 30, 40)
+        ORDER BY os.order_id
+            DESC
+    </select>
+
 </mapper>
