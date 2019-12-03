@@ -9,7 +9,7 @@ import com.jsrdxzw.mapper.OrdersMapperCustom;
 import com.jsrdxzw.pojo.OrderStatus;
 import com.jsrdxzw.pojo.Orders;
 import com.jsrdxzw.service.center.MyOrdersService;
-import com.jsrdxzw.service.impl.CommonService;
+import com.jsrdxzw.service.impl.BaseService;
 import com.jsrdxzw.utils.PagedGridResult;
 import com.jsrdxzw.vo.MyOrdersVO;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @Description:
  */
 @Service
-public class MyOrdersServiceImpl extends CommonService implements MyOrdersService {
+public class MyOrdersServiceImpl extends BaseService implements MyOrdersService {
 
     private final OrdersMapperCustom ordersMapperCustom;
     private final OrderStatusMapper orderStatusMapper;

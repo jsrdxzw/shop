@@ -28,7 +28,7 @@ import java.util.Map;
  * @Description:
  */
 @Service
-public class ItemServiceImpl extends CommonService implements ItemService {
+public class ItemServiceImpl extends BaseService implements ItemService {
 
     private final ItemsMapper itemsMapper;
     private final ItemsImgMapper itemsImgMapper;

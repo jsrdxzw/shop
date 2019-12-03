@@ -1,7 +1,6 @@
 package com.jsrdxzw.controller.center;
 
 import com.jsrdxzw.controller.BaseController;
-import com.jsrdxzw.pojo.Orders;
 import com.jsrdxzw.service.center.MyOrdersService;
 import com.jsrdxzw.utils.JSONResult;
 import com.jsrdxzw.utils.PagedGridResult;
@@ -117,16 +116,4 @@ public class MyOrdersController extends BaseController {
         return JSONResult.ok();
     }
 
-    /**
-     * 用于验证用户和订单是否有关联
-     *
-     * @return
-     */
-    private JSONResult checkUserOrder(String userId, String orderId) {
-        Orders orders = myOrdersService.queryMyOrder(userId, orderId);
-        if (orders == null) {
-            return JSONResult.errorMsg("订单不存在");
-        }
-        return JSONResult.ok();
-    }
 }

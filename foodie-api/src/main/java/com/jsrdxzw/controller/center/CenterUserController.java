@@ -110,7 +110,7 @@ public class CenterUserController extends BaseController {
 
     private Map<String, String> getErrors(BindingResult result) {
         List<FieldError> errorList = result.getFieldErrors();
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(errorList.size());
         for (FieldError fieldError : errorList) {
             // 发生验证错误对应的属性
             String field = fieldError.getField();

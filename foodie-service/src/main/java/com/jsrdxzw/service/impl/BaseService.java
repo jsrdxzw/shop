@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: 2019/12/01
  * @Description:
  */
-public class CommonService {
+public class BaseService {
 
     protected PagedGridResult setterPagedGrid(List<?> list, Integer page) {
         PageInfo<?> pageList = new PageInfo<>(list);

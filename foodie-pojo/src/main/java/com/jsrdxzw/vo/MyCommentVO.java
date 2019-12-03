@@ -8,18 +8,19 @@ import java.util.Date;
  * @Description: 用于展示商品评价的VO
  */
 public class MyCommentVO {
-    private Integer commentId;
+    private String commentId;
     private String content;
     private String specName;
     private Date createdTime;
-    private String userFace;
-    private String nickname;
+    private String itemId;
+    private String itemName;
+    private String itemImg;
 
-    public Integer getCommentId() {
+    public String getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Integer commentId) {
+    public void setCommentId(String commentId) {
         this.commentId = commentId;
     }
 
@@ -47,19 +48,27 @@ public class MyCommentVO {
         this.createdTime = createdTime;
     }
 
-    public String getUserFace() {
-        return userFace;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setUserFace(String userFace) {
-        this.userFace = userFace;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemImg() {
+        return itemImg;
+    }
+
+    public void setItemImg(String itemImg) {
+        this.itemImg = itemImg;
     }
 }

@@ -29,7 +29,7 @@ public interface MyOrdersService {
     void updateDeliverOrderStatus(String orderId);
 
     /**
-     * 查询我的order
+     * 查询我的order, 确保该用户下该订单是有效的
      *
      * @param userId
      * @param orderId
