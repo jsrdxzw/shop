@@ -1,11 +1,14 @@
 package com.jsrdxzw.vo;
 
 
+import lombok.Data;
+
 /**
  * @Author: xuzhiwei
  * @Date: 2019/11/14
  * @Description:
  */
+@Data
 public class ShopCartVO {
     private String itemId;
     private String itemName;
@@ -14,60 +17,4 @@ public class ShopCartVO {
     private String specName;
     private Integer priceDiscount;
     private Integer priceNormal;
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getItemImgUrl() {
-        return itemImgUrl;
-    }
-
-    public void setItemImgUrl(String itemImgUrl) {
-        this.itemImgUrl = itemImgUrl;
-    }
-
-    public String getSpecId() {
-        return specId;
-    }
-
-    public void setSpecId(String specId) {
-        this.specId = specId;
-    }
-
-    public String getSpecName() {
-        return specName;
-    }
-
-    public void setSpecName(String specName) {
-        this.specName = specName;
-    }
-
-    public Integer getPriceDiscount() {
-        return priceDiscount;
-    }
-
-    public void setPriceDiscount(Integer priceDiscount) {
-        this.priceDiscount = priceDiscount;
-    }
-
-    public Integer getPriceNormal() {
-        return priceNormal;
-    }
-
-    public void setPriceNormal(Integer priceNormal) {
-        this.priceNormal = priceNormal;
-    }
 }
