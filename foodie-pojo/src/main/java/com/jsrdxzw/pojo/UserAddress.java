@@ -1,7 +1,9 @@
 package com.jsrdxzw.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "user_address")
 public class UserAddress {
@@ -53,7 +55,7 @@ public class UserAddress {
     private String extand;
 
     /**
-     * 是否默认地址 1:是  0:否
+     * 是否默认地址
      */
     @Column(name = "is_default")
     private Integer isDefault;
@@ -233,18 +235,18 @@ public class UserAddress {
     }
 
     /**
-     * 获取是否默认地址 1:是  0:否
+     * 获取是否默认地址
      *
-     * @return is_default - 是否默认地址 1:是  0:否
+     * @return is_default - 是否默认地址
      */
     public Integer getIsDefault() {
         return isDefault;
     }
 
     /**
-     * 设置是否默认地址 1:是  0:否
+     * 设置是否默认地址
      *
-     * @param isDefault 是否默认地址 1:是  0:否
+     * @param isDefault 是否默认地址
      */
     public void setIsDefault(Integer isDefault) {
         this.isDefault = isDefault;

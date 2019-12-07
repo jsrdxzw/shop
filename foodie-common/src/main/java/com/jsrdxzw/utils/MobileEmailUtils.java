@@ -3,6 +3,9 @@ package com.jsrdxzw.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author xuzhiwei
+ */
 public class MobileEmailUtils {
 
     public static boolean checkMobileIsOk(String mobile) {

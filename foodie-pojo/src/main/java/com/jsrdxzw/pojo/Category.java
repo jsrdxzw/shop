@@ -1,35 +1,33 @@
 package com.jsrdxzw.pojo;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
 
 public class Category {
     /**
-     * 主键 分类id主键
+     * 主键
      */
     @Id
     private Integer id;
 
     /**
-     * 分类名称 分类名称
+     * 分类名称
      */
     private String name;
 
     /**
-     * 分类类型 分类得类型，
-     * 1:一级大分类
-     * 2:二级分类
-     * 3:三级小分类
+     * 分类类型
      */
     private Integer type;
 
     /**
-     * 父id 父id 上一级依赖的id，1级分类则为0，二级三级分别依赖上一级
+     * 父id
      */
     @Column(name = "father_id")
     private Integer fatherId;
 
     /**
-     * 图标 logo
+     * 图标
      */
     private String logo;
 
@@ -51,102 +49,90 @@ public class Category {
     private String bgColor;
 
     /**
-     * 获取主键 分类id主键
+     * 获取主键
      *
-     * @return id - 主键 分类id主键
+     * @return id - 主键
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 设置主键 分类id主键
+     * 设置主键
      *
-     * @param id 主键 分类id主键
+     * @param id 主键
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * 获取分类名称 分类名称
+     * 获取分类名称
      *
-     * @return name - 分类名称 分类名称
+     * @return name - 分类名称
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置分类名称 分类名称
+     * 设置分类名称
      *
-     * @param name 分类名称 分类名称
+     * @param name 分类名称
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 获取分类类型 分类得类型，
-     * 1:一级大分类
-     * 2:二级分类
-     * 3:三级小分类
+     * 获取分类类型
      *
-     * @return type - 分类类型 分类得类型，
-     * 1:一级大分类
-     * 2:二级分类
-     * 3:三级小分类
+     * @return type - 分类类型
      */
     public Integer getType() {
         return type;
     }
 
     /**
-     * 设置分类类型 分类得类型，
-     * 1:一级大分类
-     * 2:二级分类
-     * 3:三级小分类
+     * 设置分类类型
      *
-     * @param type 分类类型 分类得类型，
-     *             1:一级大分类
-     *             2:二级分类
-     *             3:三级小分类
+     * @param type 分类类型
      */
     public void setType(Integer type) {
         this.type = type;
     }
 
     /**
-     * 获取父id 父id 上一级依赖的id，1级分类则为0，二级三级分别依赖上一级
+     * 获取父id
      *
-     * @return father_id - 父id 父id 上一级依赖的id，1级分类则为0，二级三级分别依赖上一级
+     * @return father_id - 父id
      */
     public Integer getFatherId() {
         return fatherId;
     }
 
     /**
-     * 设置父id 父id 上一级依赖的id，1级分类则为0，二级三级分别依赖上一级
+     * 设置父id
      *
-     * @param fatherId 父id 父id 上一级依赖的id，1级分类则为0，二级三级分别依赖上一级
+     * @param fatherId 父id
      */
     public void setFatherId(Integer fatherId) {
         this.fatherId = fatherId;
     }
 
     /**
-     * 获取图标 logo
+     * 获取图标
      *
-     * @return logo - 图标 logo
+     * @return logo - 图标
      */
     public String getLogo() {
         return logo;
     }
 
     /**
-     * 设置图标 logo
+     * 设置图标
      *
-     * @param logo 图标 logo
+     * @param logo 图标
      */
     public void setLogo(String logo) {
         this.logo = logo;

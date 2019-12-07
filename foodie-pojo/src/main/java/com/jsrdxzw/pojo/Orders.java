@@ -1,11 +1,12 @@
 package com.jsrdxzw.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Orders {
     /**
-     * 订单主键 同时也是订单编号
+     * 订单主键;同时也是订单编号
      */
     @Id
     private String id;
@@ -47,13 +48,13 @@ public class Orders {
     private Integer realPayAmount;
 
     /**
-     * 邮费 默认可以为零，代表包邮
+     * 邮费;默认可以为零，代表包邮
      */
     @Column(name = "post_amount")
     private Integer postAmount;
 
     /**
-     * 支付方式 1:微信 2:支付宝
+     * 支付方式
      */
     @Column(name = "pay_method")
     private Integer payMethod;
@@ -70,13 +71,13 @@ public class Orders {
     private String extand;
 
     /**
-     * 买家是否评价 1：已评价，0：未评价
+     * 买家是否评价;1：已评价，0：未评价
      */
     @Column(name = "is_comment")
     private Integer isComment;
 
     /**
-     * 逻辑删除状态 1: 删除 0:未删除
+     * 逻辑删除状态;1: 删除 0:未删除
      */
     @Column(name = "is_delete")
     private Integer isDelete;
@@ -94,18 +95,18 @@ public class Orders {
     private Date updatedTime;
 
     /**
-     * 获取订单主键 同时也是订单编号
+     * 获取订单主键;同时也是订单编号
      *
-     * @return id - 订单主键 同时也是订单编号
+     * @return id - 订单主键;同时也是订单编号
      */
     public String getId() {
         return id;
     }
 
     /**
-     * 设置订单主键 同时也是订单编号
+     * 设置订单主键;同时也是订单编号
      *
-     * @param id 订单主键 同时也是订单编号
+     * @param id 订单主键;同时也是订单编号
      */
     public void setId(String id) {
         this.id = id;
@@ -220,36 +221,36 @@ public class Orders {
     }
 
     /**
-     * 获取邮费 默认可以为零，代表包邮
+     * 获取邮费;默认可以为零，代表包邮
      *
-     * @return post_amount - 邮费 默认可以为零，代表包邮
+     * @return post_amount - 邮费;默认可以为零，代表包邮
      */
     public Integer getPostAmount() {
         return postAmount;
     }
 
     /**
-     * 设置邮费 默认可以为零，代表包邮
+     * 设置邮费;默认可以为零，代表包邮
      *
-     * @param postAmount 邮费 默认可以为零，代表包邮
+     * @param postAmount 邮费;默认可以为零，代表包邮
      */
     public void setPostAmount(Integer postAmount) {
         this.postAmount = postAmount;
     }
 
     /**
-     * 获取支付方式 1:微信 2:支付宝
+     * 获取支付方式
      *
-     * @return pay_method - 支付方式 1:微信 2:支付宝
+     * @return pay_method - 支付方式
      */
     public Integer getPayMethod() {
         return payMethod;
     }
 
     /**
-     * 设置支付方式 1:微信 2:支付宝
+     * 设置支付方式
      *
-     * @param payMethod 支付方式 1:微信 2:支付宝
+     * @param payMethod 支付方式
      */
     public void setPayMethod(Integer payMethod) {
         this.payMethod = payMethod;
@@ -292,36 +293,36 @@ public class Orders {
     }
 
     /**
-     * 获取买家是否评价 1：已评价，0：未评价
+     * 获取买家是否评价;1：已评价，0：未评价
      *
-     * @return is_comment - 买家是否评价 1：已评价，0：未评价
+     * @return is_comment - 买家是否评价;1：已评价，0：未评价
      */
     public Integer getIsComment() {
         return isComment;
     }
 
     /**
-     * 设置买家是否评价 1：已评价，0：未评价
+     * 设置买家是否评价;1：已评价，0：未评价
      *
-     * @param isComment 买家是否评价 1：已评价，0：未评价
+     * @param isComment 买家是否评价;1：已评价，0：未评价
      */
     public void setIsComment(Integer isComment) {
         this.isComment = isComment;
     }
 
     /**
-     * 获取逻辑删除状态 1: 删除 0:未删除
+     * 获取逻辑删除状态;1: 删除 0:未删除
      *
-     * @return is_delete - 逻辑删除状态 1: 删除 0:未删除
+     * @return is_delete - 逻辑删除状态;1: 删除 0:未删除
      */
     public Integer getIsDelete() {
         return isDelete;
     }
 
     /**
-     * 设置逻辑删除状态 1: 删除 0:未删除
+     * 设置逻辑删除状态;1: 删除 0:未删除
      *
-     * @param isDelete 逻辑删除状态 1: 删除 0:未删除
+     * @param isDelete 逻辑删除状态;1: 删除 0:未删除
      */
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;

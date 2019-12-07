@@ -1,6 +1,8 @@
 package com.jsrdxzw.pojo;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "order_items")
 public class OrderItems {

@@ -1,7 +1,8 @@
 package com.jsrdxzw.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Items {
     /**
@@ -23,7 +24,7 @@ public class Items {
     private Integer catId;
 
     /**
-     * 一级分类外键id 一级分类id，用于优化查询
+     * 一级分类外键id
      */
     @Column(name = "root_cat_id")
     private Integer rootCatId;
@@ -112,18 +113,18 @@ public class Items {
     }
 
     /**
-     * 获取一级分类外键id 一级分类id，用于优化查询
+     * 获取一级分类外键id
      *
-     * @return root_cat_id - 一级分类外键id 一级分类id，用于优化查询
+     * @return root_cat_id - 一级分类外键id
      */
     public Integer getRootCatId() {
         return rootCatId;
     }
 
     /**
-     * 设置一级分类外键id 一级分类id，用于优化查询
+     * 设置一级分类外键id
      *
-     * @param rootCatId 一级分类外键id 一级分类id，用于优化查询
+     * @param rootCatId 一级分类外键id
      */
     public void setRootCatId(Integer rootCatId) {
         this.rootCatId = rootCatId;

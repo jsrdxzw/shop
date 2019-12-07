@@ -1,7 +1,8 @@
 package com.jsrdxzw.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Carousel {
     /**
@@ -17,7 +18,7 @@ public class Carousel {
     private String imageUrl;
 
     /**
-     * 背景色 背景颜色
+     * 背景色
      */
     @Column(name = "background_color")
     private String backgroundColor;
@@ -40,12 +41,12 @@ public class Carousel {
     private Integer type;
 
     /**
-     * 轮播图展示顺序 轮播图展示顺序，从小到大
+     * 轮播图展示顺序
      */
     private Integer sort;
 
     /**
-     * 是否展示 是否展示，1：展示    0：不展示
+     * 是否展示
      */
     @Column(name = "is_show")
     private Integer isShow;
@@ -99,18 +100,18 @@ public class Carousel {
     }
 
     /**
-     * 获取背景色 背景颜色
+     * 获取背景色
      *
-     * @return background_color - 背景色 背景颜色
+     * @return background_color - 背景色
      */
     public String getBackgroundColor() {
         return backgroundColor;
     }
 
     /**
-     * 设置背景色 背景颜色
+     * 设置背景色
      *
-     * @param backgroundColor 背景色 背景颜色
+     * @param backgroundColor 背景色
      */
     public void setBackgroundColor(String backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -171,36 +172,36 @@ public class Carousel {
     }
 
     /**
-     * 获取轮播图展示顺序 轮播图展示顺序，从小到大
+     * 获取轮播图展示顺序
      *
-     * @return sort - 轮播图展示顺序 轮播图展示顺序，从小到大
+     * @return sort - 轮播图展示顺序
      */
     public Integer getSort() {
         return sort;
     }
 
     /**
-     * 设置轮播图展示顺序 轮播图展示顺序，从小到大
+     * 设置轮播图展示顺序
      *
-     * @param sort 轮播图展示顺序 轮播图展示顺序，从小到大
+     * @param sort 轮播图展示顺序
      */
     public void setSort(Integer sort) {
         this.sort = sort;
     }
 
     /**
-     * 获取是否展示 是否展示，1：展示    0：不展示
+     * 获取是否展示
      *
-     * @return is_show - 是否展示 是否展示，1：展示    0：不展示
+     * @return is_show - 是否展示
      */
     public Integer getIsShow() {
         return isShow;
     }
 
     /**
-     * 设置是否展示 是否展示，1：展示    0：不展示
+     * 设置是否展示
      *
-     * @param isShow 是否展示 是否展示，1：展示    0：不展示
+     * @param isShow 是否展示
      */
     public void setIsShow(Integer isShow) {
         this.isShow = isShow;

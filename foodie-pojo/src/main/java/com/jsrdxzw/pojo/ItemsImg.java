@@ -1,7 +1,9 @@
 package com.jsrdxzw.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "items_img")
 public class ItemsImg {
