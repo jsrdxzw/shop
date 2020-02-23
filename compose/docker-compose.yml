@@ -1,0 +1,58 @@
+# 启动 docker-compose up -d
+# 停止容器并删除 docker-compose down
+# docker volume prune 删除无用的数据卷
+# 查看或者修改数据卷，linux 直接进入，mac 需要先运行screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty 找到宿主数据卷目录 然后输入bash做交互
+#version: "3"
+# 建立独立的网络，名字自取
+#networks:
+#  frontend:
+#  backend:
+#    external: true  对外开放的网络，用于不同的compose建立的容器相连接
+
+#services:
+#  mysql:
+#
+#  nginx:
+#    image: nginx
+#    depends_on: 在mysql容器启动之后
+#      - mysql
+#    links:     mysql没有指定networks或者不在frontend下，则需要这个来指定网络连接
+#      - mysql
+#    networks:
+#      - frontend
+#    volumes:
+#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro 挂在本机 这里如果需要将容器的nginx.conf拷贝到./nginx, 需要：
+#      1. docker run --rm -d --name temp-nginx nginx
+#      2. docker cp temp-nginx:/etc/nginx/nginx.conf ./nginx/nginx.conf  当然也可以反过来表示从宿主机到容器
+#      3. docker stop temp-nginx 清理临时容器
+#      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+#      - html:/usr/share/nginx/html 挂在数据卷中，数据卷在docker中
+#    ports:
+#      - "80:80"
+#   容器发生问题自动重启
+#    restart: always
+
+#volumes:
+#  html:
+
+version: "3"
+
+networks:
+  backend:
+
+services:
+  mysql:
+    image: mysql
+    networks:
+      - backend
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf:ro
+      - ./mysql/data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    #    restart: always
+    ports:
+      - 3306:3306
+#  docker logs some-mysql 查看日志
+

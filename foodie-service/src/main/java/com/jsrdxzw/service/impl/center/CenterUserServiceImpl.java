@@ -29,7 +29,9 @@ public class CenterUserServiceImpl implements CenterUserService {
     @Override
     public ShopUser queryUserInfo(String userId) {
         ShopUser user = shopUserMapper.selectByPrimaryKey(userId);
-        user.setPassword(null);
+        if (user != null) {
+            user.setPassword(null);
+        }
         return user;
     }
 

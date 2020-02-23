@@ -15,13 +15,4 @@ public class MD5Util {
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         return Base64.getEncoder().encodeToString(md5.digest(value.getBytes()));
     }
-
-    public static void main(String[] args) {
-        try {
-            String imooc = getMD5Str("imooc");
-            System.out.println(imooc);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 }
