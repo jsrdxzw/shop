@@ -37,14 +37,10 @@
 
 version: "3"
 
-networks:
-  backend:
-
 services:
   mysql:
+    container_name: master-mysql
     image: mysql
-    networks:
-      - backend
     volumes:
       - ./mysql/my.cnf:/etc/mysql/my.cnf:ro
       - ./mysql/data:/var/lib/mysql
@@ -52,7 +48,73 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     #    restart: always
+    networks:
+      - backend
     ports:
       - 3306:3306
-#  docker logs some-mysql 查看日志
+  nginx:
+    container_name: master-nginx
+    #    build: ./nginx
+    # 增加了日志切分功能的镜像, 和build一起用可重新命名
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/website:/website
+    networks:
+      - backend
+    ports:
+      - 80:80
+      - 443:443
+    # 串行执行多个命令
+  #    command:
+  #      - /bin/sh
+  #      - -c
+  #      - |
+  #          nginx -g 'daemon off;'
+  #          service cron start
+  #  docker logs some-mysql 查看日志
 
+  tomcat1:
+    container_name: tomcat1
+    image: tomcat
+    volumes:
+      - ./tomcat1/app:/usr/local/tomcat/webapps/ROOT
+    networks:
+      backend:
+        ipv4_address: 172.16.238.10
+    #    ports:
+    #      - 8080:8080
+    depends_on:
+      - nginx
+  tomcat2:
+    container_name: tomcat2
+    image: tomcat
+    volumes:
+      - ./tomcat2/app:/usr/local/tomcat/webapps/ROOT
+    networks:
+      backend:
+        ipv4_address: 172.16.238.20
+    #    ports:
+    #      - 8080:8080
+    depends_on:
+      - nginx
+  tomcat3:
+    container_name: tomcat3
+    image: tomcat
+    volumes:
+      - ./tomcat3/app:/usr/local/tomcat/webapps/ROOT
+    networks:
+      backend:
+        ipv4_address: 172.16.238.30
+    #    ports:
+    #      - 8080:8080
+    depends_on:
+      - nginx
+
+networks:
+  backend:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
