@@ -1,0 +1,14 @@
+file:
+  image-server-url: "http://localhost:8088/foodie/faces/"
+  #  image-server-url 会找下面的地址，然后+/foodie/faces/
+  image-user-face-location: "/Users/xuzhiwei/开发文件/foodie/"
+  image-formats:
+    - jpg
+    - jpeg
+    - png
+mybatis:
+  configuration:
+    cache-enabled: false
+spring:
+  datasource:
+    url: jdbc:mysql://master-mysql:3306/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true

@@ -14,12 +14,10 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class CorsConfig {
 
-    private static final String ORIGIN_LOCATION = "http://localhost:8080";
-
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin(ORIGIN_LOCATION);
+        corsConfiguration.addAllowedOrigin("*");
         // 可发送cookie信息
         corsConfiguration.setAllowCredentials(true);
         // 允许请求的方式
