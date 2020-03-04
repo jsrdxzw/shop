@@ -149,8 +149,8 @@ public class DateUtil {
      * Rolls (up/down) a single unit of time on the given time field.
      *
      * @param isoString
-     * @param field the time field.
-     * @param up Indicates if rolling up or rolling down the field value.
+     * @param field     the time field.
+     * @param up        Indicates if rolling up or rolling down the field value.
      */
     public static String roll(String isoString, String fmt, int field,
                               boolean up) {
@@ -168,9 +168,9 @@ public class DateUtil {
      * Rolls (up/down) a single unit of time on the given time field.
      *
      * @param isoString
-     * @param field the time field.
-     * @param up Indicates if rolling up or rolling down the field value.
-     * @exception ParseException if an unknown field value is given.
+     * @param field     the time field.
+     * @param up        Indicates if rolling up or rolling down the field value.
+     * @throws ParseException if an unknown field value is given.
      */
     public static String roll(String isoString, int field, boolean up) throws
             ParseException {
@@ -179,7 +179,8 @@ public class DateUtil {
     }
 
     /**
-     *  java.util.Date
+     * java.util.Date
+     *
      * @param dateText
      * @param format
      * @param lenient
@@ -264,7 +265,7 @@ public class DateUtil {
         return dateToString(getCurrentDateTime(), ISO_EXPANDED_DATE_FORMAT);
     }
 
-    public static String dateToStringWithTime( ) {
+    public static String dateToStringWithTime() {
 
         return dateToString(new Date(), DATETIME_PATTERN);
     }
@@ -361,7 +362,8 @@ public class DateUtil {
     /**
      * Function to convert String to Date Object. If invalid input then current or next day date
      * is returned (Added by Ali Naqvi on 2006-5-16).
-     * @param str String input in YYYY-MM-DD HH:MM[:SS] format.
+     *
+     * @param str      String input in YYYY-MM-DD HH:MM[:SS] format.
      * @param isExpiry boolean if set and input string is invalid then next day date is returned
      * @return Date
      */
@@ -423,10 +425,8 @@ public class DateUtil {
     }
 
     /**
-     *
-     * @Description: 获得本月的第一天日期
      * @return
-     *
+     * @Description: 获得本月的第一天日期
      * @author leechenxiang
      * @date 2017年5月31日 下午1:37:34
      */
@@ -443,10 +443,8 @@ public class DateUtil {
     }
 
     /**
-     *
-     * @Description: 获得本月的最后一天日期
      * @return
-     *
+     * @Description: 获得本月的最后一天日期
      * @author leechenxiang
      * @date 2017年5月31日 下午1:37:50
      */
@@ -485,8 +483,7 @@ public class DateUtil {
         }
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Date date = stringToDate("1900-01-01");
         System.out.println(date);
     }

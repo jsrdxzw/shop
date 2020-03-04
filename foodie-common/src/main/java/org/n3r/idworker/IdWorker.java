@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class IdWorker {
     protected long epoch = 1288834974657L;
 //    protected long epoch = 1387886498127L; // 2013-12-24 20:01:38.127
-    
+
 
     protected long workerIdBits = 10L;
     protected long maxWorkerId = -1L ^ (-1L << workerIdBits);

@@ -13,10 +13,6 @@ spring:
       max-file-size: 512000                           # 最大500KB
       max-request-size: 512000
   datasource:                                         # 数据源的相关配置
-    url: jdbc:mysql://localhost:3306/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 30000       # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 默认:30秒
       minimum-idle: 5                 # 最小连接数

@@ -12,7 +12,7 @@ import java.util.Map;
  * @Date: 2019/11/09
  * @Description: 自定义mapper，加一些连接查询等复杂查询
  */
-public interface CategoryMapperCustom{
+public interface CategoryMapperCustom {
     List<CategoryVO> getSubCatList(int rootCatId);
 
     /**
