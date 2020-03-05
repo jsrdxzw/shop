@@ -12,9 +12,13 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 控制台打印，便于开发
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    #    docker定义的内部mysql ip地址
+    url: jdbc:mysql://172.16.238.100/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: localhost
+    #    docker定义的内部redis ip地址
+    host: 172.16.238.200
+    password: 123456
+    database: 0

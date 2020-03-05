@@ -13,7 +13,7 @@
         FROM
         items_comments ic
         JOIN
-        users u
+        shop_user u
         ON
         ic.user_id = u.id
         WHERE

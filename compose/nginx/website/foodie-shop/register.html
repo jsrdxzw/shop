@@ -179,7 +179,7 @@
                 // form提交
                 axios.defaults.withCredentials = true;
                 // console.log(axios.defaults);
-                axios.post(serverUrl + '/passport/regist', userBO)
+                axios.post(serverUrl + '/passport/register', userBO)
                     .then(res => {
                         if (res.data.status == 200) {
                             var user = res.data;

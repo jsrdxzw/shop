@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="en">
 <head lang="en">
     <meta charset="UTF-8">
     <title>天天吃货 - 登录</title>
@@ -79,7 +78,7 @@
 </div>
 <script type="text/javascript " src="js/app.js"></script>
 <script type="text/javascript">
-    var index = new Vue({
+    const index = new Vue({
         el: "#login",
         data: {
             username: null,
@@ -88,10 +87,9 @@
             returnUrl: ""
         },
         created() {
-
             // 登录成功后会跳原来页面
-            var returnUrl = app.getUrlParam("returnUrl");
-            if (returnUrl != null && returnUrl != undefined && returnUrl != '') {
+            const returnUrl = app.getUrlParam("returnUrl");
+            if (returnUrl != null && returnUrl !== '') {
                 this.returnUrl = returnUrl;
             }
         },
@@ -102,10 +100,10 @@
             },
             doLogin() {
 
-                if (this.username == null || this.username == undefined || this.username == '') {
+                if (this.username == null || this.username === '') {
                     alert("用户名不能为空");
                     return;
-                } else if (this.password == null || this.password == undefined || this.password == '') {
+                } else if (this.password == null || this.password === '') {
                     alert("密码不能为空");
                     return;
                 } else if (this.password.length < 6) {
@@ -113,34 +111,32 @@
                     return;
                 }
 
-                var userBO = {
+                const userBO = {
                     username: this.username,
                     password: this.password
                 };
-                // console.log(userBO);
 
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
 
-                var returnUrl = this.returnUrl;
+                const returnUrl = this.returnUrl;
                 // form提交
                 axios.defaults.withCredentials = true;
                 // console.log(axios.defaults);
                 axios.post(serverUrl + '/passport/login', userBO)
                     .then(res => {
-                        if (res.data.status == 200) {
-                            var user = res.data;
+                        if (res.data.status === 200) {
+                            const user = res.data;
                             // console.log(user);
 
                             // window.location.href = app.ctx + "/index.html";
-                            if (returnUrl != null && returnUrl != undefined && returnUrl != '') {
+                            if (returnUrl != null && returnUrl !== '') {
                                 window.location.href = returnUrl;
                             } else {
                                 window.location.href = "index.html";
                             }
 
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
-                            return;
                         }
                     });
             }

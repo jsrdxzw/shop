@@ -421,7 +421,7 @@
 <script src="components/VuePaging/zpageNav.js"></script>
 <script type="text/javascript " src="js/app.js"></script>
 <script type="text/javascript">
-    var index = new Vue({
+    const index = new Vue({
         el: "#items",
         data: {
             userIsLogin: false,
@@ -455,9 +455,9 @@
             this.judgeUserLoginStatus();
 
             // 渲染商品信息
-            var itemId = app.getUrlParam("itemId");
+            const itemId = app.getUrlParam("itemId");
             // 如果itemId为空，跳转到错误页面
-            if (itemId == null || itemId == undefined || itemId == '') {
+            if (itemId == null || itemId === '') {
                 window.location.href = "http://www.imooc.com/error/noexists";
                 return;
             }
@@ -476,7 +476,7 @@
         methods: {
             goUserCenter() {
                 // 判断用户是否登录
-                var userIsLogin = this.userIsLogin;
+                const userIsLogin = this.userIsLogin;
                 if (!userIsLogin) {
                     // 用户未登录，则跳转
                     window.location.href = "login.html?returnUrl=" + app.centerServerUrl;
@@ -487,17 +487,16 @@
             // 渲染商品评价等级数量
             renderCommentLevelCounts(itemId) {
 
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.get(
                     serverUrl + '/items/commentLevel?itemId=' + itemId, {})
                     .then(res => {
-                        if (res.data.status == 200) {
-                            var countsVO = res.data.data;
-                            this.countsVO = countsVO;
+                        if (res.data.status === 200) {
+                            this.countsVO = res.data.data;
                             // console.log(countsVO);
 
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
                         }
                     });
@@ -515,32 +514,31 @@
             },
             renderComments(itemId, level, page, pageSize) {
 
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.get(
                     serverUrl + '/items/comments?itemId=' + itemId + "&level=" + level + "&page=" + page +
                     "&pageSize=" + pageSize, {})
                     .then(res => {
-                        if (res.data.status == 200) {
-                            var grid = res.data.data;
-                            var commentList = grid.rows;
+                        if (res.data.status === 200) {
+                            const grid = res.data.data;
+                            const commentList = grid.rows;
                             this.commentList = commentList;
                             // console.log(commentList);
 
-                            for (var i = 0; i < commentList.length; i++) {
-                                var date = commentList[i].createdTime;
-                                var formatedTime = moment(date).format('YYYY年MM月DD日 h:mm:ss');
+                            for (let i = 0; i < commentList.length; i++) {
+                                const date = commentList[i].createdTime;
+                                commentList[i].createdTime = moment(date).format('YYYY年MM月DD日 h:mm:ss');
                                 // console.log(formatedTime);
-                                commentList[i].createdTime = formatedTime;
                             }
 
-                            var maxPage = grid.total; // 获得总页数
-                            var total = grid.records; // 获得总记录数
+                            const maxPage = grid.total; // 获得总页数
+                            const total = grid.records; // 获得总记录数
 
                             this.maxPage = maxPage;
                             this.total = total;
 
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
                         }
                     });
@@ -549,14 +547,14 @@
                 window.location.href = "shopcart.html";
             },
             minus() {
-                var tmpCounts = parseInt(this.buyCounts) - 1;
+                let tmpCounts = parseInt(this.buyCounts) - 1;
                 if (tmpCounts <= 0) {
                     tmpCounts = 1;
                 }
                 this.buyCounts = tmpCounts;
             },
             plus() {
-                var tmpCounts = parseInt(this.buyCounts) + 1;
+                let tmpCounts = parseInt(this.buyCounts) + 1;
                 if (tmpCounts >= 100) {
                     tmpCounts = 99;
                 }
@@ -564,18 +562,18 @@
             },
             addToCart() {
                 // 由于cookie大小限制为4k，另外课程第一阶段是没有redis的，所以相关暂存性内容会存入到cookie中
-                var shopcartCounts = app.getShopcartItemCounts();
+                const shopcartCounts = app.getShopcartItemCounts();
                 if (shopcartCounts >= 8) {
                     alert("您购物车中的食物太多啦~请把它们带回家吧~！");
                     return;
                 }
 
                 // 创建购物车对象
-                var item = this.item;
-                var itemImgList = this.itemImgList;
-                var selectedSku = this.selectedSku;
+                const item = this.item;
+                const itemImgList = this.itemImgList;
+                const selectedSku = this.selectedSku;
 
-                var tmpBuyCounts = this.buyCounts;
+                let tmpBuyCounts = this.buyCounts;
                 tmpBuyCounts = parseInt(tmpBuyCounts);
                 if (typeof (tmpBuyCounts) != "number") {
                     alert("购买数量不能为非数字！");
@@ -585,7 +583,7 @@
                 }
 
                 // 构建购物车商品对象
-                var shopcartItem = new app.ShopcartItem(item.id,
+                const shopcartItem = new app.ShopcartItem(item.id,
                     itemImgList[0].url,
                     item.itemName,
                     selectedSku.id,
@@ -600,10 +598,10 @@
                 // 购物车应该在登录/注册的时候同步
 
                 // 判断当前用户是否登录，如果登录，则把购物车数据发送至后端（后端需要合并已存在的商品）
-                var userIsLogin = this.userIsLogin;
+                const userIsLogin = this.userIsLogin;
                 if (userIsLogin) {
-                    var userInfo = this.userInfo;
-                    var serverUrl = app.serverUrl;
+                    const userInfo = this.userInfo;
+                    const serverUrl = app.serverUrl;
                     axios.defaults.withCredentials = true;
                     axios.post(
                         serverUrl + '/shopcart/add?userId=' + userInfo.id,
@@ -614,9 +612,9 @@
                             }
                         })
                         .then(res => {
-                            if (res.data.status == 200) {
+                            if (res.data.status === 200) {
 
-                            } else if (res.data.status == 500) {
+                            } else if (res.data.status === 500) {
                                 alert(res.data.msg);
                             }
                         });
@@ -637,9 +635,9 @@
                 this.shopcartItemCounts = app.getShopcartItemCounts();
             },
             doSearch() {
-                var keywords = this.keywords;
+                const keywords = this.keywords;
                 // console.log(keywords);
-                if (keywords == null || keywords == undefined || keywords == '') {
+                if (keywords == null || keywords === '') {
                     alert("搜索内容不能为空");
                     return;
                 }
@@ -652,14 +650,14 @@
             },
             // 渲染商品信息
             renderItemInfo(itemId) {
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.get(serverUrl + '/items/info/' + itemId, {})
                     .then(res => {
-                        if (res.data.status == 200) {
-                            var itemInfo = res.data.data;
-                            var item = itemInfo.item;
+                        if (res.data.status === 200) {
+                            const itemInfo = res.data.data;
+                            const item = itemInfo.item;
                             // 如果item为空，则商品不存在，跳转错误页面
-                            if (item == null || item == undefined || item == '') {
+                            if (item == null || item === '') {
                                 window.location.href = "http://www.imooc.com/error/noexists";
                             }
 
@@ -667,20 +665,19 @@
                             this.item = item;
 
                             // 商品图片放大镜效果实现
-                            var itemImgListTemp = itemInfo.itemImgList;
+                            const itemImgListTemp = itemInfo.itemImgList;
                             this.renderZoomItemImgs(itemImgListTemp);
 
                             // 商品规格实现
-                            var itemSpecListTemp = itemInfo.itemSpecList;
+                            const itemSpecListTemp = itemInfo.itemSpecList;
                             this.itemSpecList = itemSpecListTemp;
-                            var selectedSku = itemSpecListTemp[0];
-                            this.selectedSku = selectedSku;
+                            this.selectedSku = itemSpecListTemp[0];
 
                             this.itemParams = itemInfo.itemParams;
 
                             // console.log(this.itemImgList);
 
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
                         }
                     });
@@ -688,17 +685,17 @@
             // 选择某一个sku规格后重新渲染页面
             selectSku(arrIndex) {
                 // console.log(arrIndex);
-                var itemSpecList = this.itemSpecList;
-                var selectedSku = itemSpecList[arrIndex];
-                this.selectedSku = selectedSku;
+                const itemSpecList = this.itemSpecList;
+                this.selectedSku = itemSpecList[arrIndex];
             },
             // 商品图片放大镜效果实现
             renderZoomItemImgs(itemImgListTemp) {
-                // 循环图片，把头图放在第一张
+                let tempImg;
+// 循环图片，把头图放在第一张
                 for (var i = 0; i < itemImgListTemp.length; i++) {
-                    var tempImg = itemImgListTemp[i];
-                    var isMain = tempImg.isMain;
-                    if (isMain == 1) {
+                    tempImg = itemImgListTemp[i];
+                    const isMain = tempImg.isMain;
+                    if (isMain === 1) {
                         // 删除主图在数组中的位置
                         itemImgListTemp.splice(i, 1);
                         // 把主图插入到第一个元素
@@ -708,18 +705,18 @@
                 this.itemImgList = itemImgListTemp;
 
                 // 循环图片，渲染放大镜商品图
-                var zoomBoxHtml = '';
-                var mainItemImg = itemImgListTemp[0];
+                let zoomBoxHtml = '';
+                const mainItemImg = itemImgListTemp[0];
                 zoomBoxHtml += '' +
                     '<div class="tb-booth tb-pic tb-s310">' +
                     '<img src="' + mainItemImg.url + '" alt="细节展示放大镜特效" rel="' + mainItemImg.url +
                     '" class="jqzoom" />' +
                     '</div>';
                 zoomBoxHtml += '<ul class="tb-thumb" id="thumblist">';
-                for (var i = 0; i < itemImgListTemp.length; i++) {
-                    var tempImg = itemImgListTemp[i];
+                for (let i = 0; i < itemImgListTemp.length; i++) {
+                    tempImg = itemImgListTemp[i];
 
-                    if (i == 0) {
+                    if (i === 0) {
                         zoomBoxHtml += '<li class="tb-selected">';
                     } else {
                         zoomBoxHtml += '<li>';
@@ -732,7 +729,7 @@
                 }
                 zoomBoxHtml += '</ul>';
 
-                var $zoomBox = $('#zoomBox');
+                const $zoomBox = $('#zoomBox');
                 $zoomBox.html(zoomBoxHtml);
 
                 $(".jqzoom").imagezoom();
@@ -765,12 +762,12 @@
             },
             // 通过cookie判断用户是否登录
             judgeUserLoginStatus() {
-                var userCookie = app.getCookie("user");
-                if (userCookie != null && userCookie != undefined && userCookie != '') {
-                    var userInfoStr = decodeURIComponent(userCookie);
+                const userCookie = app.getCookie("user");
+                if (userCookie != null && userCookie !== '') {
+                    const userInfoStr = decodeURIComponent(userCookie);
                     // console.log(userInfo);
-                    if (userInfoStr != null && userInfoStr != undefined && userInfoStr != '') {
-                        var userInfo = JSON.parse(userInfoStr);
+                    if (userInfoStr != null && userInfoStr !== '') {
+                        const userInfo = JSON.parse(userInfoStr);
                         // 判断是否是一个对象
                         if (typeof (userInfo) == "object") {
                             this.userIsLogin = true;
@@ -787,17 +784,16 @@
                 }
             },
             logout() {
-                var userId = this.userInfo.id;
-                var serverUrl = app.serverUrl;
+                const userId = this.userInfo.id;
+                const serverUrl = app.serverUrl;
 
                 axios.defaults.withCredentials = true;
                 axios.post(serverUrl + '/passport/logout?userId=' + userId, {})
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             window.location.href = "index.html";
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
-                            return;
                         }
                     });
             },
