@@ -37,7 +37,7 @@ public final class CookieUtils {
      * @return
      * @Description: 得到Cookie的值
      */
-    private static String getCookieValue(HttpServletRequest request, String cookieName, boolean isDecoder) {
+    public static String getCookieValue(HttpServletRequest request, String cookieName, boolean isDecoder) {
         Cookie[] cookieList = request.getCookies();
         if (cookieList == null || cookieName == null) {
             return null;
