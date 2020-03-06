@@ -1,5 +1,6 @@
 package com.jsrdxzw.controller;
 
+import com.jsrdxzw.bo.ShopCartBO;
 import com.jsrdxzw.bo.SubmitOrderBO;
 import com.jsrdxzw.enums.OrderStatusEnum;
 import com.jsrdxzw.enums.PayMethod;
@@ -7,10 +8,13 @@ import com.jsrdxzw.pojo.OrderStatus;
 import com.jsrdxzw.service.OrderService;
 import com.jsrdxzw.utils.CookieUtils;
 import com.jsrdxzw.utils.JSONResult;
+import com.jsrdxzw.utils.JsonUtils;
+import com.jsrdxzw.utils.RedisOperator;
 import com.jsrdxzw.vo.MerchantOrderVO;
 import com.jsrdxzw.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @Author: xuzhiwei
@@ -33,10 +38,12 @@ public class OrdersController extends BaseController {
 
     private final OrderService orderService;
     private final RestTemplate restTemplate;
+    private final RedisOperator redisOperator;
 
-    public OrdersController(OrderService orderService, RestTemplate restTemplate) {
+    public OrdersController(OrderService orderService, RestTemplate restTemplate, RedisOperator redisOperator) {
         this.orderService = orderService;
         this.restTemplate = restTemplate;
+        this.redisOperator = redisOperator;
     }
 
     @ApiOperation(value = "用户下单", notes = "用户下单", httpMethod = "POST")
@@ -45,8 +52,16 @@ public class OrdersController extends BaseController {
         if (!PayMethod.isValidatePay(submitOrderBO.getPayMethod())) {
             return JSONResult.errorMsg("支付方法不支持");
         }
+        String key = FOODIE_SHOPCART + ":" + submitOrderBO.getUserId();
+        String shopCartJson = redisOperator.get(key);
+        if (StringUtils.isBlank(shopCartJson)) {
+            return JSONResult.errorMsg("购物车没有内容");
+        }
+        // 用户购物车的所有数据
+        List<ShopCartBO> shopCartList = JsonUtils.jsonToList(shopCartJson, ShopCartBO.class);
+
         // 创建订单
-        OrderVO orderVO = orderService.createOrder(submitOrderBO);
+        OrderVO orderVO = orderService.createOrder(shopCartList, submitOrderBO);
         MerchantOrderVO merchantOrderVO = orderVO.getMerchantOrderVO();
         merchantOrderVO.setReturnUrl(PAY_RETURN_URL);
         // 方便测试，所有支付改为1分钱
@@ -66,9 +81,12 @@ public class OrdersController extends BaseController {
         }
 
         // 移除购物车中已经提交的商品
-        // TODO 整合redis之后完善购物车中的商品，并且同步到前端
-        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, "", true);
-
+        // 整合redis之后完善购物车中的商品，并且同步到前端Cookie
+        // 清理已经创建订单的购物车数据
+        shopCartList.removeAll(orderVO.getToBeRemovedShopCartList());
+        String value = JsonUtils.objectToJson(shopCartList);
+        redisOperator.set(key, value);
+        CookieUtils.setCookie(request, response, FOODIE_SHOPCART, value, true);
 
         return JSONResult.ok(orderVO.getOrderId());
     }

@@ -1,6 +1,5 @@
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -15,6 +14,7 @@
     <link href="css/jsstyle.css" rel="stylesheet" type="text/css"/>
     <link href="css/lee.css" rel="stylesheet" type="text/css"/>
 
+    <script type="text/javascript" src="basic/js/jquery-1.7.min.js"></script>
     <script type="text/javascript" src="js/address.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.9/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -70,11 +70,11 @@
             <div class="address">
                 <h3>确认收货地址 </h3>
                 <div class="control">
-                    <div class="tc-btn createAddr theme-login am-btn am-btn-danger">使用新地址</div>
+                    <div class="tc-btn createAddr theme-login am-btn am-btn-danger" @click="showAddressDialog">使用新地址</div>
                 </div>
                 <div class="clear"></div>
                 <ul>
-						<span v-show="addressList.length > 0">
+					<span v-show="addressList.length > 0">
 							<!-- <block v-for="(address, aindex) in addressList" :key="aindex">
 								<div class="per-border"></div> -->
                             <!-- <li class="user-addresslist " v-for="(address, aindex) in addressList" :key="aindex" style="margin-top: 6px;"> -->
@@ -89,7 +89,6 @@
 									<!-- background: url(../images/peraddbg.png)no-repeat scroll 0% 0%; -->
                                     <!-- :style="address.isDefault == 1 ? " -->
 									<div class="user DefaultAddr">
-
 										<span class="buy-address-detail">
 											<span class="buy-user">{{address.receiver}}</span>
 											<span class="buy-phone">{{address.mobile}}</span>
@@ -123,9 +122,7 @@
 							</li>
                             <!-- </block> -->
 						</span>
-
                 </ul>
-
                 <div class="clear"></div>
             </div>
 
@@ -133,12 +130,12 @@
             <div class="logistics">
                 <h3>选择支付方式</h3>
                 <ul class="pay-list">
-                    <li class="" @click="choosePayMethod(1)" style="width: 180px;height:40px;padding:3px;"><img
-                            src="img/wxpay.png"/><span></span></li>
-                    <!-- <li class="pay qq" @click="choosePayMethod(1)"><img src="images/weizhifu.jpg"/>微信<span></span></li> -->
-                    <!-- <li class="pay taobao" @click="choosePayMethod(2)"><img src="images/zhifubao.jpg"/>支付宝<span></span></li> -->
-                    <li class="" @click="choosePayMethod(2)" style="width: 180px;height:40px;padding:3px;"><img
-                            src="img/alipay.png"/><span></span></li>
+<!--                    <li class="" @click="choosePayMethod(1)" style="width: 180px;height:40px;padding:3px;"><img-->
+<!--                            src="img/wxpay.png"/><span></span></li>-->
+                     <li class="pay qq" @click="choosePayMethod(1)"><img src="images/weizhifu.jpg"/>微信<span></span></li>
+                     <li class="pay taobao" @click="choosePayMethod(2)"><img src="images/zhifubao.jpg"/>支付宝<span></span></li>
+<!--                    <li class="" @click="choosePayMethod(2)" style="width: 180px;height:40px;padding:3px;"><img-->
+<!--                            src="img/alipay.png"/><span></span></li>-->
                 </ul>
             </div>
             <div class="clear"></div>
@@ -414,7 +411,7 @@
     // 		window.open('alipayTempTransit.html?orderId='+orderId);
     // 	});
     // });
-    var index = new Vue({
+    const index = new Vue({
         el: "#pay",
         data: {
             userIsLogin: false,
@@ -487,7 +484,7 @@
         methods: {
             goUserCenter() {
                 // 判断用户是否登录
-                var userIsLogin = this.userIsLogin;
+                const userIsLogin = this.userIsLogin;
                 if (!userIsLogin) {
                     // 用户未登录，则跳转
                     window.location.href = "login.html?returnUrl=" + app.centerServerUrl;
@@ -505,15 +502,15 @@
             // 提交订单，创建订单
             submitOrder() {
                 // 判断提交的商品不能为空
-                var orderItemList = this.orderItemList;
-                if (orderItemList == null || orderItemList == undefined || orderItemList == '' || orderItemList.length <= 0) {
+                const orderItemList = this.orderItemList;
+                if (orderItemList == null || orderItemList === '' || orderItemList.length <= 0) {
                     alert("没有商品信息，订单无法提交~！");
                     return;
                 }
                 // 拼接规格ids
-                var itemSpecIds = "";
-                for (var i = 0; i < orderItemList.length; i++) {
-                    var tmpSpecId = orderItemList[i].specId;
+                let itemSpecIds = "";
+                for (let i = 0; i < orderItemList.length; i++) {
+                    const tmpSpecId = orderItemList[i].specId;
                     itemSpecIds += tmpSpecId;
                     if (i < orderItemList.length - 1) {
                         itemSpecIds += ",";
@@ -521,27 +518,24 @@
                 }
 
                 // 判断选中的地址id不能为空
-                var choosedAddressId = this.choosedAddressId;
-                if (choosedAddressId == null || choosedAddressId == undefined || choosedAddressId == '') {
+                const choosedAddressId = this.choosedAddressId;
+                if (choosedAddressId == null || choosedAddressId === '') {
                     alert("请选择收货地址！");
                     return;
                 }
 
                 // 判断支付方式不能为空
-                var choosedPayMethod = parseInt(this.choosedPayMethod);
-                if (choosedPayMethod != 1 && choosedPayMethod != 2) {
+                const choosedPayMethod = parseInt(this.choosedPayMethod);
+                if (choosedPayMethod !== 1 && choosedPayMethod !== 2) {
                     alert("请选择支付方式！");
                     return;
                 }
 
-                // var newWindow = window.open();
-
                 // 买家备注可以为空
-                var orderRemarker = this.orderRemarker;
-                // console.log(orderRemarker);
+                const orderRemarker = this.orderRemarker;
 
-                var userInfo = this.userInfo;
-                var serverUrl = app.serverUrl;
+                const userInfo = this.userInfo;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/orders/create',
@@ -559,14 +553,14 @@
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             // alert("OK");
-                            var orderId = res.data.data;
+                            const orderId = res.data.data;
                             // 判断是否微信还是支付宝支付
-                            if (choosedPayMethod == 1) {
+                            if (choosedPayMethod === 1) {
                                 // 微信支付则跳转到微信支付页面，并且获得支付二维码
                                 window.location.href = "wxpay.html?orderId=" + orderId;
-                            } else if (choosedPayMethod == 2) {
+                            } else if (choosedPayMethod === 2) {
                                 this.orderId = orderId;
 
                                 // 支付宝支付直接跳转
@@ -591,11 +585,11 @@
             // 编辑地址
             editAddress(addressId) {
                 // 获得编辑的地址内容
-                var addressList = this.addressList;
-                var updateAddress = null;
-                for (var i = 0; i < addressList.length; i++) {
-                    var tmpAddress = addressList[i];
-                    if (tmpAddress.id == addressId) {
+                const addressList = this.addressList;
+                let updateAddress = null;
+                for (let i = 0; i < addressList.length; i++) {
+                    const tmpAddress = addressList[i];
+                    if (tmpAddress.id === addressId) {
                         updateAddress = tmpAddress;
                         break;
                     }
@@ -628,22 +622,22 @@
             },
             // 删除地址
             deleteAddress(addressId) {
-                var isDel = window.confirm("确认删除改地址吗");
+                const isDel = window.confirm("确认删除改地址吗");
                 if (!isDel) {
                     return;
                 }
 
                 // 如果删除的地址是默认地址或者选中地址，则choosedAddressId和defaultAddressId要设置为空
-                if (addressId == this.choosedAddressId) {
+                if (addressId === this.choosedAddressId) {
                     this.choosedAddressId = "";
                 }
 
-                if (addressId == this.defaultAddressId) {
+                if (addressId === this.defaultAddressId) {
                     this.defaultAddressId = "";
                 }
 
-                var userInfo = this.userInfo;
-                var serverUrl = app.serverUrl;
+                const userInfo = this.userInfo;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/address/delete?userId=' + userInfo.id + "&addressId=" + addressId,
@@ -655,7 +649,7 @@
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             this.renderUserAddressList();
                         } else {
                             alert(res.data.msg);
@@ -664,8 +658,8 @@
             },
             // 设置默认地址
             setDefaultAddress(addressId) {
-                var userInfo = this.userInfo;
-                var serverUrl = app.serverUrl;
+                const userInfo = this.userInfo;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/address/setDefault?userId=' + userInfo.id + "&addressId=" + addressId,
@@ -677,7 +671,7 @@
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             this.renderUserAddressList();
                         } else {
                             alert(res.data.msg);
@@ -696,11 +690,11 @@
             },
             renderConfirmAddress(addressId) {
                 // 提交订单的确认地址要跟着动态改变
-                var addressList = this.addressList;
-                var confirmAddress = null;
-                for (var i = 0; i < addressList.length; i++) {
-                    var tmpAddress = addressList[i];
-                    if (tmpAddress.id == addressId) {
+                const addressList = this.addressList;
+                let confirmAddress = null;
+                for (let i = 0; i < addressList.length; i++) {
+                    const tmpAddress = addressList[i];
+                    if (tmpAddress.id === addressId) {
                         confirmAddress = tmpAddress;
                         break;
                     }
@@ -709,9 +703,9 @@
                 this.confirmAddress = confirmAddress;
             },
             updateCity() {
-                for (var i in this.arr) {
-                    var obj = this.arr[i];
-                    if (obj.name == this.prov) {
+                for (let i in this.arr) {
+                    const obj = this.arr[i];
+                    if (obj.name === this.prov) {
                         this.cityArr = obj.sub;
                         break;
                     }
@@ -719,9 +713,9 @@
                 this.city = this.cityArr[1].name;
             },
             updateDistrict() {
-                for (var i in this.cityArr) {
-                    var obj = this.cityArr[i];
-                    if (obj.name == this.city) {
+                for (let i in this.cityArr) {
+                    const obj = this.cityArr[i];
+                    if (obj.name === this.city) {
                         this.districtArr = obj.sub;
                         break;
                     }
@@ -734,8 +728,8 @@
             },
             // 创建用户新地址
             saveNewAddressOrUpdate() {
-                var receiver = this.receiver;
-                if (receiver == null || receiver == '' || receiver == undefined) {
+                const receiver = this.receiver;
+                if (receiver == null || receiver === '' || receiver === undefined) {
                     alert("收货人姓名不能为空");
                     return;
                 }
@@ -744,40 +738,40 @@
                     return;
                 }
 
-                var mobile = this.mobile;
-                if (mobile == null || mobile == '' || mobile == undefined) {
+                const mobile = this.mobile;
+                if (mobile == null || mobile === '' || mobile === undefined) {
                     alert("手机不能为空");
                     return;
                 }
-                if (mobile.length != 11) {
+                if (mobile.length !== 11) {
                     alert("手机号长度为11位");
                     return;
                 }
-                var checkMobile = app.checkMobile(mobile);
+                const checkMobile = app.checkMobile(mobile);
                 if (!checkMobile) {
                     alert('请输入有效的手机号码！');
                     return;
                 }
 
-                var prov = this.prov;
-                var city = this.city;
-                var district = this.district;
+                const prov = this.prov;
+                const city = this.city;
+                const district = this.district;
 
-                var detail = this.detail;
-                if (detail == null || detail == '' || detail == undefined) {
+                const detail = this.detail;
+                if (detail == null || detail === '' || detail === undefined) {
                     alert("详细地址不能为空");
                     return;
                 }
 
                 // 添加新地址
-                var userInfo = this.userInfo;
-                var serverUrl = app.serverUrl;
+                const userInfo = this.userInfo;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
 
-                var addressId = this.updatedAddressId;
+                const addressId = this.updatedAddressId;
 
                 // 地址id为空，则新增地址，否则更新地址
-                if (addressId == "" || addressId == undefined || addressId == null) {
+                if (addressId === "" || addressId === undefined) {
                     axios.post(
                         serverUrl + '/address/add',
                         {
@@ -796,13 +790,13 @@
                             }
                         })
                         .then(res => {
-                            if (res.data.status == 200) {
+                            if (res.data.status === 200) {
                                 this.closeAddressDialog();
                                 this.renderUserAddressList();
 
                                 // 设置更新地址的id为空
                                 this.updatedAddressId = "";
-                            } else if (res.data.status == 500) {
+                            } else if (res.data.status === 500) {
                                 alert(res.data.msg);
                             }
                         });
@@ -826,10 +820,10 @@
                             }
                         })
                         .then(res => {
-                            if (res.data.status == 200) {
+                            if (res.data.status === 200) {
                                 this.closeAddressDialog();
                                 this.renderUserAddressList();
-                            } else if (res.data.status == 500) {
+                            } else if (res.data.status === 500) {
                                 alert(res.data.msg);
                             }
                         });
@@ -848,9 +842,9 @@
                 this.flushAddressForm();
             },
             renderUserAddressList() {
-                var userInfo = this.userInfo;
+                const userInfo = this.userInfo;
                 // 请求后端获得最新数据
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/address/list?userId=' + userInfo.id, {},
@@ -861,8 +855,8 @@
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
-                            var addressList = res.data.data;
+                        if (res.data.status === 200) {
+                            const addressList = res.data.data;
                             // console.log(addressList);
                             this.addressList = addressList;
 
@@ -871,7 +865,7 @@
 
                             // 清空地址内容
                             this.flushAddressForm();
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
                             console.log(res.data.msg);
                         } else {
@@ -891,15 +885,15 @@
                 this.updateDistrict();
             },
             setDefaultChoosedAddressId(addressList) {
-                var confirmAddress = {};
-                for (var i = 0; i < addressList.length; i++) {
-                    var address = addressList[i];
-                    if (address.isDefault == 1) {
+                let confirmAddress = {};
+                for (let i = 0; i < addressList.length; i++) {
+                    const address = addressList[i];
+                    if (address.isDefault === 1) {
                         this.defaultAddressId = address.id;
                         confirmAddress = address;
                         // 如果当前页面还没有选中的地址，则把默认地址作为选中地址
-                        var choosedAddressId = this.choosedAddressId;
-                        if (choosedAddressId == null || choosedAddressId == undefined || choosedAddressId == '') {
+                        const choosedAddressId = this.choosedAddressId;
+                        if (choosedAddressId == null || choosedAddressId === '') {
                             this.choosedAddressId = address.id;
                         }
                         break;
@@ -910,20 +904,20 @@
                 this.confirmAddress = confirmAddress;
             },
             renderOrderInfoList() {
-                var selectedItemSpecIds = app.getUrlParam("selectedItemSpecIds");
-                if (selectedItemSpecIds == null || selectedItemSpecIds == '' || selectedItemSpecIds ==
+                const selectedItemSpecIds = app.getUrlParam("selectedItemSpecIds");
+                if (selectedItemSpecIds == null || selectedItemSpecIds === '' || selectedItemSpecIds ===
                     undefined) {
                     app.goErrorPage();
                 }
 
-                var specIdsArray = new Array();
+                let specIdsArray = new Array();
                 specIdsArray = selectedItemSpecIds.split(",");
 
-                var orderItemList = [];
-                var totalAmount = 0;
-                for (var i = 0; i < specIdsArray.length; i++) {
-                    var tmpSpecId = specIdsArray[i];
-                    var orderItem = this.getItemFromCookieShopcartList(tmpSpecId);
+                const orderItemList = [];
+                let totalAmount = 0;
+                for (let i = 0; i < specIdsArray.length; i++) {
+                    const tmpSpecId = specIdsArray[i];
+                    const orderItem = this.getItemFromCookieShopcartList(tmpSpecId);
                     orderItemList.push(orderItem);
                     totalAmount += (orderItem.priceDiscount * orderItem.buyCounts);
                 }
@@ -937,15 +931,15 @@
                 }
             },
             getItemFromCookieShopcartList(specId) {
-                var shopcartList = app.getShopcartList();
+                const shopcartList = app.getShopcartList();
 
-                if (shopcartList == null || shopcartList == undefined || shopcartList.length == 0) {
+                if (shopcartList == null || shopcartList.length === 0) {
                     app.goErrorPage();
                 }
 
-                for (var i = 0; i < shopcartList.length; i++) {
-                    var tmpSpecId = shopcartList[i].specId;
-                    if (tmpSpecId == specId) {
+                for (let i = 0; i < shopcartList.length; i++) {
+                    const tmpSpecId = shopcartList[i].specId;
+                    if (tmpSpecId === specId) {
                         return shopcartList[i];
                     }
                 }
@@ -956,12 +950,12 @@
             },
             // 通过cookie判断用户是否登录
             judgeUserLoginStatus() {
-                var userCookie = app.getCookie("user");
-                if (userCookie != null && userCookie != undefined && userCookie != '') {
-                    var userInfoStr = decodeURIComponent(userCookie);
+                const userCookie = app.getCookie("user");
+                if (userCookie != null && userCookie !== '') {
+                    const userInfoStr = decodeURIComponent(userCookie);
                     // console.log(userInfo);
-                    if (userInfoStr != null && userInfoStr != undefined && userInfoStr != '') {
-                        var userInfo = JSON.parse(userInfoStr);
+                    if (userInfoStr != null && userInfoStr !== '') {
+                        const userInfo = JSON.parse(userInfoStr);
                         // 判断是否是一个对象
                         if (typeof (userInfo) == "object") {
                             this.userIsLogin = true;

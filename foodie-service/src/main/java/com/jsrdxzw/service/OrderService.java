@@ -1,8 +1,11 @@
 package com.jsrdxzw.service;
 
+import com.jsrdxzw.bo.ShopCartBO;
 import com.jsrdxzw.bo.SubmitOrderBO;
 import com.jsrdxzw.pojo.OrderStatus;
 import com.jsrdxzw.vo.OrderVO;
+
+import java.util.List;
 
 /**
  * @Author: xuzhiwei
@@ -13,10 +16,12 @@ public interface OrderService {
     /**
      * 创建订单
      *
+     *
+     * @param shopCartList
      * @param submitOrderBO
      * @return
      */
-    OrderVO createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(List<ShopCartBO> shopCartList, SubmitOrderBO submitOrderBO);
 
     /**
      * 修改订单状态

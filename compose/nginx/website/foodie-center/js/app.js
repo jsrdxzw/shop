@@ -9,8 +9,8 @@ window.app = {
     /* 生产环境 */
     serverUrl: "http://api.z.jsrdxzw.com",                      // 接口服务接口地址
     paymentServerUrl: "http://payment.t.mukewang.com/foodie-payment",       // 支付中心服务地址
-    shopServerUrl: "http://shop.z.jsrdxzw.com/foodie-shop",                            // 门户网站地址
-    centerServerUrl: "http://center.z.jsrdxzw.com/foodie-center",                        // 用户中心地址
+    shopServerUrl: "http://shop.z.jsrdxzw.com",                            // 门户网站地址
+    centerServerUrl: "http://center.z.jsrdxzw.com",                        // 用户中心地址
     cookieDomain: "z.jsrdxzw.com;",
 
     ctx: "/foodie-shop",

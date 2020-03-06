@@ -252,6 +252,7 @@ public final class CookieUtils {
             int len = domains.length;
             if (len > 3 && !isIp(serverName)) {
                 // www.xxx.com.cn
+                // 根据最新的标准，cookie domain前面不需要加. 比如.xxx.com.cn应该写成xxx.com.cn,这样在aa.xxx.com.cn cookie也是可读取的
                 domainName = domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
             } else if (len <= 3 && len > 1) {
                 // xxx.com or xxx.cn

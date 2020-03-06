@@ -12,3 +12,4 @@ target
 **/logs
 **/log
 **/data
+**/*.jar

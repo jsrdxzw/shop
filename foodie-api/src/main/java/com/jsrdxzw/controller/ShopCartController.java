@@ -4,14 +4,11 @@ import com.jsrdxzw.bo.ShopCartBO;
 import com.jsrdxzw.utils.JSONResult;
 import com.jsrdxzw.utils.JsonUtils;
 import com.jsrdxzw.utils.RedisOperator;
-import com.jsrdxzw.vo.ShopCartVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +32,7 @@ public class ShopCartController extends BaseController {
     @PostMapping("/add")
     public JSONResult add(
             @RequestParam String userId,
-            @RequestBody ShopCartBO shopCartBO,
-            HttpServletRequest request,
-            HttpServletResponse response
+            @RequestBody ShopCartBO shopCartBO
     ) {
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("");
@@ -50,6 +45,9 @@ public class ShopCartController extends BaseController {
         if (StringUtils.isNotBlank(shopCartJson)) {
             // 该user下已经有购物车了
             shopCartList = JsonUtils.jsonToList(shopCartJson, ShopCartBO.class);
+            if (shopCartList == null) {
+                return JSONResult.ok();
+            }
             // 判断是否已经有了该商品
             boolean isHave = false;
             for (ShopCartBO shopCart : shopCartList) {
@@ -77,6 +75,22 @@ public class ShopCartController extends BaseController {
     ) {
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(itemSpecId)) {
             return JSONResult.errorMsg("参数不能为空");
+        }
+        String key = FOODIE_SHOPCART + ":" + userId;
+        String shopCartJson = redisOperator.get(key);
+        List<ShopCartBO> shopCartList;
+        if (StringUtils.isNotBlank(shopCartJson)) {
+            shopCartList = JsonUtils.jsonToList(shopCartJson, ShopCartBO.class);
+            if (shopCartList == null) {
+                return JSONResult.ok();
+            }
+            for (ShopCartBO shopCart : shopCartList) {
+                if (shopCart.getSpecId().equals(itemSpecId)) {
+                    shopCartList.remove(shopCart);
+                    break;
+                }
+            }
+            redisOperator.set(key, JsonUtils.objectToJson(shopCartList));
         }
         return JSONResult.ok();
     }
