@@ -18,7 +18,14 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    #    docker定义的内部redis ip地址
-    host: 172.16.238.200
-    password: 123456
+    #  docker定义的内部redis ip地址
+    #  有了哨兵就不需要指定host了
+    #  host: 172.16.238.200
+    timeout: 6000ms
     database: 0
+    sentinel:
+      master: foodie
+      nodes:
+        - 172.16.238.210:26379
+        - 172.16.238.211:26379
+        - 172.16.238.212:26379
