@@ -67,15 +67,7 @@ public class IndexController {
         if (rootCatId == null) {
             return JSONResult.errorMsg("分类不存在");
         }
-        String subCatListString = redisOperator.get("subCat:" + rootCatId);
-        List<CategoryVO> subCatList;
-        if (StringUtils.isBlank(subCatListString)) {
-            subCatList = categoryService.getSubCatList(rootCatId);
-            redisOperator.set("subCat:" + rootCatId, JsonUtils.objectToJson(subCatList));
-        } else {
-            subCatList = JsonUtils.jsonToList(subCatListString,CategoryVO.class);
-        }
-        return JSONResult.ok(subCatList);
+        return JSONResult.ok(categoryService.getSubCatList(rootCatId));
     }
 
     @ApiOperation(value = "查询每个一级分类下的最新6条商品数据", notes = "查询每个一级分类下的最新6条商品数据", httpMethod = "GET")
