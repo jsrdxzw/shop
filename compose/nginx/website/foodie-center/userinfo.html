@@ -208,7 +208,7 @@
     });
 </script>
 <script type="text/javascript">
-    var index = new Vue({
+    const index = new Vue({
         el: "#userInfo",
         data: {
             userIsLogin: false,
@@ -236,10 +236,10 @@
                 let multiForm = new FormData(); 		//创建一个form对象
                 multiForm.append('file', f, f.name);  	//append 向form表单添加数据
 
-                var userInfo = this.userInfo;
+                const userInfo = this.userInfo;
                 // console.log(userInfo);
                 // 请求后端获得最新数据
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/userInfo/uploadFace?userId=' + userInfo.id,
@@ -252,7 +252,7 @@
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             // var userInfoMore = res.data.data;
                             // console.log(userInfoMore);
                             alert("头像上传成功!");
@@ -265,10 +265,10 @@
                     });
             },
             saveUserInfo() {
-                var userInfoMore = this.userInfoMore;
+                const userInfoMore = this.userInfoMore;
 
-                var nickname = userInfoMore.nickname;
-                if (nickname == null || nickname == "" || nickname == undefined) {
+                const nickname = userInfoMore.nickname;
+                if (nickname == null || nickname === "" || nickname === undefined) {
                     alert("昵称不能为空");
                     return;
                 }
@@ -277,30 +277,30 @@
                     return;
                 }
 
-                var realname = userInfoMore.realname;
-                if (realname != null && realname != "" && realname != undefined) {
+                const realname = userInfoMore.realname;
+                if (realname != null && realname !== "" && realname !== undefined) {
                     if (realname.length > 12) {
                         alert("真实姓名长度不能超过12位");
                         return;
                     }
                 }
 
-                var mobile = userInfoMore.mobile;
-                if (mobile != null && mobile != "" && mobile != undefined) {
-                    if (mobile.length != 11) {
+                const mobile = userInfoMore.mobile;
+                if (mobile != null && mobile !== "" && mobile !== undefined) {
+                    if (mobile.length !== 11) {
                         alert("手机号长度为11位");
                         return;
                     }
-                    var checkMobile = app.checkMobile(mobile);
+                    const checkMobile = app.checkMobile(mobile);
                     if (!checkMobile) {
                         alert('请输入有效的手机号码！');
                         return;
                     }
                 }
 
-                var email = userInfoMore.email;
-                if (email != null && email != "" && email != undefined) {
-                    var checkEmail = app.checkEmail(email);
+                const email = userInfoMore.email;
+                if (email != null && email !== "" && email !== undefined) {
+                    const checkEmail = app.checkEmail(email);
                     if (!checkEmail) {
                         alert('请输入有效的邮箱地址！');
                         return;
@@ -309,14 +309,12 @@
 
 
                 // console.log(this.userInfoMore);
-                var birthday = $("#datepicker").val();
-                userInfoMore.birthday = birthday;
+                userInfoMore.birthday = $("#datepicker").val();
                 // console.log(userInfoMore);
 
-                var userInfo = this.userInfo;
-                // console.log(userInfo);
+                const userInfo = this.userInfo;
                 // 请求后端获得最新数据
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/userInfo/update?userId=' + userInfo.id,
@@ -328,7 +326,7 @@
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             // var userInfoMore = res.data.data;
                             // console.log(userInfoMore);
                             alert("用户信息修改成功!");
@@ -341,26 +339,25 @@
                     });
             },
             renderUserInfo() {
-                var userInfo = this.userInfo;
+                const userInfo = this.userInfo;
                 // console.log(userInfo);
                 // 请求后端获得最新数据
-                var serverUrl = app.serverUrl;
+                const serverUrl = app.serverUrl;
                 axios.defaults.withCredentials = true;
                 axios.get(
-                    serverUrl + '/center/userInfo?userId=' + userInfo.id, {},
-                    {
+                    serverUrl + '/center/userInfo?userId=' + userInfo.id, {
                         headers: {
-                            'headerUserId': userInfo.id,
-                            'headerUserToken': userInfo.userUniqueToken
+                            headerUserId: userInfo.id,
+                            headerUserToken: userInfo.userUniqueToken
                         }
                     })
                     .then(res => {
-                        if (res.data.status == 200) {
-                            var userInfoMore = res.data.data;
+                        if (res.data.status === 200) {
+                            const userInfoMore = res.data.data;
                             // console.log(userInfoMore);
                             this.userInfoMore = userInfoMore;
 
-                            var datepicker = moment(userInfoMore.birthday).format('YYYY-MM-DD');
+                            const datepicker = moment(userInfoMore.birthday).format('YYYY-MM-DD');
                             $("#datepicker").attr("value", datepicker);
                         } else {
                             alert(res.data.msg);
@@ -371,24 +368,20 @@
             // 查询是否支付成功
             // 通过cookie判断用户是否登录
             judgeUserLoginStatus() {
-                var userCookie = app.getCookie("user");
+                const userCookie = app.getCookie("user");
                 if (
                     userCookie != null &&
-                    userCookie != undefined &&
-                    userCookie != ""
+                    userCookie !== ""
                 ) {
-                    var userInfoStr = decodeURIComponent(userCookie);
-                    // console.log(userInfoStr);
+                    const userInfoStr = decodeURIComponent(userCookie);
                     if (
                         userInfoStr != null &&
-                        userInfoStr != undefined &&
-                        userInfoStr != ""
+                        userInfoStr !== ""
                     ) {
-                        var userInfo = JSON.parse(userInfoStr);
+                        const userInfo = JSON.parse(userInfoStr);
                         // 判断是否是一个对象
-                        if (typeof (userInfo) == "object") {
+                        if (typeof userInfo === "object") {
                             this.userIsLogin = true;
-                            // console.log(userInfo);
                             this.userInfo = userInfo;
                         } else {
                             this.userIsLogin = false;
