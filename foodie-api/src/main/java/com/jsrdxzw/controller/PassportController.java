@@ -5,6 +5,7 @@ import com.jsrdxzw.bo.UserBO;
 import com.jsrdxzw.pojo.ShopUser;
 import com.jsrdxzw.service.UserService;
 import com.jsrdxzw.utils.*;
+import com.jsrdxzw.vo.UsersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -68,8 +69,9 @@ public class PassportController extends BaseController {
             return JSONResult.errorMsg("两次密码输入不一致");
         }
         ShopUser user = userService.createUser(userBO);
-        ShopUser result = userDataMasking(user);
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(result), true);
+        UsersVO usersVO = convertToUsersVO(user);
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVO), true);
+        syncRedisShopCart(usersVO.getId(), request, response);
         return JSONResult.ok();
     }
 
@@ -85,18 +87,21 @@ public class PassportController extends BaseController {
         if (user == null) {
             return JSONResult.errorMsg("用户名或密码不正确");
         }
-        ShopUser result = userDataMasking(user);
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(result), true);
-        // TODO 生成用户token，存入redis会话
+
+        // 生成用户token，存入redis会话
+        UsersVO usersVO = convertToUsersVO(user);
+        // cookie做前端的持久化
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVO), true);
         // 同步购物车数据
-        syncRedisShopCart(user.getId(), request, response);
-        return JSONResult.ok(result);
+        syncRedisShopCart(usersVO.getId(), request, response);
+        return JSONResult.ok(usersVO);
     }
 
     @ApiOperation(value = "用户退出登录", notes = "用户退出登录", httpMethod = "POST")
     @PostMapping("/logout")
     public JSONResult logout(@RequestParam String userId, HttpServletRequest request, HttpServletResponse response) {
         CookieUtils.deleteCookie(request, response, "user");
+        redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
         return JSONResult.ok();
     }
 
@@ -141,5 +146,4 @@ public class PassportController extends BaseController {
             }
         }
     }
-
 }

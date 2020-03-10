@@ -9,6 +9,7 @@ import com.jsrdxzw.utils.CookieUtils;
 import com.jsrdxzw.utils.DateUtil;
 import com.jsrdxzw.utils.JSONResult;
 import com.jsrdxzw.utils.JsonUtils;
+import com.jsrdxzw.vo.UsersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -86,8 +87,8 @@ public class CenterUserController extends BaseController {
             }
             String faceUrl = fileProperties.getImageServerUrl() + userId + "/" + newFileName + "?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN);
             ShopUser user = centerUserService.updateUserFace(userId, faceUrl);
-            userDataMasking(user);
-            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(user), true);
+            UsersVO usersVO = convertToUsersVO(user);
+            CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVO), true);
         } else {
             return JSONResult.errorMsg("文件不能为空！");
         }
@@ -102,9 +103,9 @@ public class CenterUserController extends BaseController {
             return JSONResult.errorMap(getErrors(result));
         }
         ShopUser user = centerUserService.updateUserInfo(userId, centerUserBO);
-        ShopUser safeUser = userDataMasking(user);
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(safeUser), true);
-        // TODO 后续整合redis做分布式会话
+        // 整合redis做分布式会话
+        UsersVO usersVO = convertToUsersVO(user);
+        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVO), true);
         return JSONResult.ok();
     }
 

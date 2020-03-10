@@ -4,7 +4,12 @@ import com.jsrdxzw.pojo.Orders;
 import com.jsrdxzw.pojo.ShopUser;
 import com.jsrdxzw.service.center.MyOrdersService;
 import com.jsrdxzw.utils.JSONResult;
+import com.jsrdxzw.utils.RedisOperator;
+import com.jsrdxzw.vo.UsersVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.UUID;
 
 /**
  * @Author: xuzhiwei
@@ -15,9 +20,13 @@ public class BaseController {
     public static final Integer COMMENT_PAGE_SIZE = 10;
     public static final Integer PAGE_SIZE = 20;
     public static final String FOODIE_SHOPCART = "shopcart";
+    public static final String REDIS_USER_TOKEN = "redis_user_token";
 
     @Autowired
     private MyOrdersService myOrdersService;
+
+    @Autowired
+    private RedisOperator redisOperator;
 
     /**
      * 支付中心的地址
@@ -28,15 +37,18 @@ public class BaseController {
      */
     public static final String PAY_RETURN_URL = "http://5vc9db.natappfree.cc/orders/notifyMerchantOrderPaid";
 
-    protected ShopUser userDataMasking(ShopUser user) {
-        user.setPassword(null);
-        user.setMobile(null);
-        user.setEmail(null);
-        user.setCreatedTime(null);
-        user.setUpdatedTime(null);
-        user.setBirthday(null);
-        user.setRealname(null);
-        return user;
+    /**
+     * 返回User对象，同步token到redis
+     *
+     * @return
+     */
+    protected UsersVO convertToUsersVO(ShopUser user) {
+        String uniqueToken = UUID.randomUUID().toString().trim();
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(user, usersVO);
+        usersVO.setUserUniqueToken(uniqueToken);
+        redisOperator.set(REDIS_USER_TOKEN + ":" + usersVO.getId(), uniqueToken);
+        return usersVO;
     }
 
     /**

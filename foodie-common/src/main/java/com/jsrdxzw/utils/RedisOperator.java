@@ -48,4 +48,8 @@ public class RedisOperator {
     public void multiSet(Map<String, String> map) {
         redisTemplate.opsForValue().multiSet(map);
     }
+
+    public void del(String key) {
+        redisTemplate.delete(key);
+    }
 }
