@@ -1,0 +1,14 @@
+server:
+  port: 8033
+spring:
+  datasource:
+    #    docker定义的内部mysql ip地址
+    url: jdbc:mysql://localhost/foodie-shop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  elasticsearch:
+    rest:
+      uris: localhost:9200
+      connection-timeout: 10s

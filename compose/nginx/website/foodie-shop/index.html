@@ -342,9 +342,9 @@
         // console.log("type:" + type);
         // console.log("catOrItemId:" + catOrItemId);
 
-        if (type == 1) {
+        if (type === 1) {
             window.open("item.html?itemId=" + catOrItemId);
-        } else if (type == 2) {
+        } else if (type === 2) {
             window.open("catItems.html?searchType=catItems&catId=" + catOrItemId);
 
         }
@@ -371,9 +371,9 @@
             // var me = this;
             // 用户cookie操作
             var userCookie = app.getCookie("user");
-            if (userCookie != null && userCookie != undefined && userCookie != '') {
+            if (userCookie != null && userCookie !== '') {
                 var userInfoStr = decodeURIComponent(userCookie);
-                if (userInfoStr != null && userInfoStr != undefined && userInfoStr != '') {
+                if (userInfoStr != null && userInfoStr !== '') {
                     var userInfo = JSON.parse(userInfoStr);
                     // 判断是否是一个对象
                     if (typeof (userInfo) == "object") {
@@ -417,7 +417,7 @@
             doSearch() {
                 var keywords = this.keywords;
                 // console.log(keywords);
-                if (keywords == null || keywords == undefined || keywords == '') {
+                if (keywords == null || keywords === '') {
                     alert("搜索内容不能为空");
                     return;
                 }
@@ -432,7 +432,7 @@
                 var catIndex = this.catIndex;
 
                 var rootCat = categoryList[catIndex];
-                if (rootCat == undefined || rootCat == null || rootCat == '') {
+                if (rootCat === undefined || rootCat == null || rootCat === '') {
                     return;
                 }
                 var rootCatId = rootCat.id;
@@ -444,7 +444,7 @@
                 axios.get(
                     serverUrl + '/index/sixNewItems/' + rootCatId, {})
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             var sixNewItemsListTemp = res.data.data
                             var sixNewItemsList = this.sixNewItemsList;
                             sixNewItemsList.push(sixNewItemsListTemp[0]);
@@ -461,7 +461,7 @@
                 axios.get(
                     serverUrl + '/index/carousel', {})
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             var carouselList = res.data.data
                             this.carouselList = carouselList;
 
@@ -475,10 +475,10 @@
                                 var itemId = carouselList[i].itemId;
                                 var catOrItemId = "";
 
-                                if (type == 1) {
+                                if (type === 1) {
                                     catOrItemId = itemId;
                                 }
-                                if (type == 2) {
+                                if (type === 2) {
                                     catOrItemId = catId;
                                 }
 
@@ -508,7 +508,7 @@
                     serverUrl + '/index/cats', {})
                     .then(res => {
 
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             var categoryList = res.data.data
                             this.categoryList = categoryList;
 
@@ -555,13 +555,13 @@
                                 var rootCatId = subWapper.attr("rootCatId");
                                 // console.log(rootCatId);
                                 // 如果该节点下没有内容，则发起请求查询子分类并且渲染到页面，如果有的话就不查询了（懒加载模式）
-                                if (subCatHtml == null || subCatHtml == '' || subCatHtml == undefined) {
-                                    if (rootCatId != undefined && rootCatId != null && rootCatId != '') {
+                                if (subCatHtml == null || subCatHtml === '' || subCatHtml === undefined) {
+                                    if (rootCatId !== undefined && rootCatId != null && rootCatId !== '') {
                                         // 根据root分类id查询该分类下的所有子分类
                                         axios.get(
                                             serverUrl + '/index/subCat/' + rootCatId, {})
                                             .then(res => {
-                                                if (res.data.status == 200) {
+                                                if (res.data.status === 200) {
                                                     var catList = res.data.data
                                                     // this.catList = catList;
                                                     // debugger;
@@ -649,9 +649,9 @@
                 axios.defaults.withCredentials = true;
                 axios.post(serverUrl + '/passport/logout?userId=' + userId, {})
                     .then(res => {
-                        if (res.data.status == 200) {
+                        if (res.data.status === 200) {
                             window.location.href = "index.html";
-                        } else if (res.data.status == 500) {
+                        } else if (res.data.status === 500) {
                             alert(res.data.msg);
                             return;
                         }
