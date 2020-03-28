@@ -1,20 +1,19 @@
 package com.jsrdxzw.controller.center;
 
 import com.jsrdxzw.bo.center.CenterUserBO;
+import com.jsrdxzw.config.OssConfig;
 import com.jsrdxzw.controller.BaseController;
 import com.jsrdxzw.pojo.ShopUser;
-import com.jsrdxzw.resource.FileProperties;
 import com.jsrdxzw.service.center.CenterUserService;
 import com.jsrdxzw.utils.CookieUtils;
-import com.jsrdxzw.utils.DateUtil;
 import com.jsrdxzw.utils.JSONResult;
 import com.jsrdxzw.utils.JsonUtils;
 import com.jsrdxzw.vo.UsersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,15 +36,16 @@ import java.util.Map;
 @Api(value = "用户信息接口", tags = {"用户信息相关接口"})
 @RestController
 @RequestMapping("/userInfo")
+@Slf4j
 public class CenterUserController extends BaseController {
 
     private final CenterUserService centerUserService;
 
-    private final FileProperties fileProperties;
+    private final OssConfig ossConfig;
 
-    public CenterUserController(CenterUserService centerUserService, FileProperties fileProperties) {
+    public CenterUserController(CenterUserService centerUserService, OssConfig ossConfig) {
         this.centerUserService = centerUserService;
-        this.fileProperties = fileProperties;
+        this.ossConfig = ossConfig;
     }
 
     @ApiOperation(value = "用户头像修改", notes = "用户头像修改", httpMethod = "POST")
@@ -67,25 +65,18 @@ public class CenterUserController extends BaseController {
         if (StringUtils.isNotBlank(fileName)) {
             String[] split = fileName.split("\\.");
             String suffix = split[split.length - 1];
-            if (validateImageFormat(suffix)) {
+            if (invalidImageFormat(suffix)) {
                 return JSONResult.errorMsg("图片格式不正确！");
             }
-            // 覆盖式上传，增量式可以再拼接时间
-            String newFileName = "face-" + userId + "." + suffix;
-            File finalFilePath = new File(fileProperties.getImageUserFaceLocation() + File.separator + userId + File.separator + newFileName);
-            if (finalFilePath.getParentFile() != null) {
-                finalFilePath.getParentFile().mkdirs();
-            }
-            // 拷贝文件
-            try (
-                    InputStream inputStream = file.getInputStream();
-                    FileOutputStream outputStream = new FileOutputStream(finalFilePath)
-            ) {
-                IOUtils.copy(inputStream, outputStream);
+            String uploadPath = ossConfig.getAvatarPath() + "/" + userId + "/" + fileName;
+
+            String faceUrl = ossConfig.getOssHost() + "/" + uploadPath;
+
+            try {
+                centerUserService.uploadUserFace(ossConfig.getBucketName(), uploadPath, file.getInputStream());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("get file input stream error:{}", file);
             }
-            String faceUrl = fileProperties.getImageServerUrl() + userId + "/" + newFileName + "?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN);
             ShopUser user = centerUserService.updateUserFace(userId, faceUrl);
             UsersVO usersVO = convertToUsersVO(user);
             CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(usersVO), true);
@@ -122,12 +113,7 @@ public class CenterUserController extends BaseController {
         return map;
     }
 
-    private boolean validateImageFormat(String suffix) {
-        for (String imageFormat : fileProperties.getImageFormats()) {
-            if (!imageFormat.equalsIgnoreCase(suffix)) {
-                return false;
-            }
-        }
-        return true;
+    private boolean invalidImageFormat(String suffix) {
+        return Arrays.stream(ossConfig.getImageFormats()).noneMatch(it -> it.equalsIgnoreCase(suffix));
     }
 }

@@ -1,11 +1,23 @@
-file:
-  image-server-url: "http://localhost:8088/foodie/faces/"
-  #  image-server-url 会找下面的地址，然后+/foodie/faces/
-  image-user-face-location: "/Users/xuzhiwei/开发文件/foodie/"
-  image-formats:
-    - jpg
-    - jpeg
-    - png
+#file:
+#  image-server-url: "http://localhost:8088/foodie/faces/"
+#  #  image-server-url 会找下面的地址，然后+/foodie/faces/
+#  image-user-face-location: "/Users/xuzhiwei/开发文件/foodie/"
+#  image-formats:
+#    - jpg
+#    - jpeg
+#    - png
+aliyun:
+  oss:
+    endpoint: oss-cn-xxx
+    ossHost: https://oss地址
+    accessKeyId: 替换你实际的id
+    accessKeySecret: 实际的secret
+    bucketName: xzw-shop
+    avatarPath: avatar
+    imageFormats:
+      - jpg
+      - jpeg
+      - png
 mybatis:
   configuration:
     cache-enabled: false

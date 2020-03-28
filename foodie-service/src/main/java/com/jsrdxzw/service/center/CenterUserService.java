@@ -3,6 +3,8 @@ package com.jsrdxzw.service.center;
 import com.jsrdxzw.bo.center.CenterUserBO;
 import com.jsrdxzw.pojo.ShopUser;
 
+import java.io.InputStream;
+
 /**
  * @Author: xuzhiwei
  * @Date: 2019/11/28
@@ -23,9 +25,9 @@ public interface CenterUserService {
     /**
      * 更新用户头像
      *
-     * @param userId
-     * @param faceUrl
      * @return
      */
     ShopUser updateUserFace(String userId, String faceUrl);
+
+    void uploadUserFace(String bucketName, String objectName, InputStream inputStream);
 }

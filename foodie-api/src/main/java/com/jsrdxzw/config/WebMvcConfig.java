@@ -1,7 +1,6 @@
 package com.jsrdxzw.config;
 
 import com.jsrdxzw.interceptor.UserLoginInterceptor;
-import com.jsrdxzw.resource.FileProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +16,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-
-    private final FileProperties fileProperties;
-
-    public WebMvcConfig(FileProperties fileProperties) {
-        this.fileProperties = fileProperties;
-    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -58,7 +51,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // file:/Users/...
         // 映射swagger2
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/META-INF/resources/")
-                .addResourceLocations("file:" + fileProperties.getImageUserFaceLocation());
+                .addResourceLocations("classpath:/META-INF/resources/");
     }
 }
