@@ -30,6 +30,9 @@
         <module>foodie-api</module>
         <module>foodie-sso</module>
         <module>foodie-search</module>
+        <module>rabbitmq</module>
+        <module>protobuf</module>
+        <module>executor-job</module>
     </modules>
 
     <properties>
@@ -162,7 +165,13 @@
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+            <version>2.1.2</version>
         </dependency>
 
     </dependencies>

@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+option java_package = "com.jsrdxzw.proto";
+option java_outer_classname = "MessageHolder";
+
+enum MessageType {
+    CONFIRM = 0;
+    RAPID = 1;
+    RELIANT = 2;
+    UNKNOWN = 3;
+}
+
+message Message {
+    required string messageId = 1;
+    required string topic = 2;
+    required string routingKey = 3;
+    map<string, string> attributes = 4;
+    optional int32 delayMills = 5;
+    optional MessageType messageType = 6 [default = CONFIRM];
+}
+

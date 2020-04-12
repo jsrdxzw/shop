@@ -79,8 +79,8 @@ services:
       - master-nginx
       - master-mysql
       - master-redis
-#      - sliver-redis01
-#      - sliver-redis02
+    #      - sliver-redis01
+    #      - sliver-redis02
     volumes:
       - ./api/logs:/logs
   master-redis:
@@ -129,6 +129,28 @@ services:
     networks:
       - backend
 
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - backend
+
+  xxl-job:
+    image: xuxueli/xxl-job-admin:2.1.2
+    container_name: xxl-job-admin
+    environment:
+      - PARAMS=--spring.datasource.url=jdbc:mysql://172.16.238.100/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false --spring.datasource.username=root --spring.datasource.password=root
+    ports:
+      - 8090:8080
+    volumes:
+      - ./xxl-job/log:/data/applogs
+    networks:
+      - backend
+    depends_on:
+      - master-mysql
   #  es01:
   #    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
   #    container_name: es01
@@ -204,66 +226,66 @@ services:
   #      - master-redis
   #    networks:
   #      backend:
-#        ipv4_address: 172.16.238.201
-#    command: redis-server /etc/redis/redis.conf
-#
-#  sliver-redis02:
-#    image: redis
-#    container_name: sliver-redis02
-#    volumes:
-#      - ./redis-02/conf:/etc/redis
-#      - ./redis-02/data:/data
-#    depends_on:
-#      - master-redis
-#    networks:
-#      backend:
-#        ipv4_address: 172.16.238.202
-#    command: redis-server /etc/redis/redis.conf
+  #        ipv4_address: 172.16.238.201
+  #    command: redis-server /etc/redis/redis.conf
+  #
+  #  sliver-redis02:
+  #    image: redis
+  #    container_name: sliver-redis02
+  #    volumes:
+  #      - ./redis-02/conf:/etc/redis
+  #      - ./redis-02/data:/data
+  #    depends_on:
+  #      - master-redis
+  #    networks:
+  #      backend:
+  #        ipv4_address: 172.16.238.202
+  #    command: redis-server /etc/redis/redis.conf
 
-#  sentinel-1:
-#    image: redis
-#    container_name: sentinel-1
-#    depends_on:
-#      - master-redis
-#      - sliver-redis01
-#      - sliver-redis02
-#    networks:
-#      backend:
-#        ipv4_address: 172.16.238.210
-#    volumes:
-#      - ./sentinel-1/redis-sentinel.conf:/etc/redis/redis-sentinel.conf
-#      - ./sentinel-1/data:/data
-#    command: redis-sentinel /etc/redis/redis-sentinel.conf
-#
-#  sentinel-2:
-#    image: redis
-#    container_name: sentinel-2
-#    depends_on:
-#      - master-redis
-#      - sliver-redis01
-#      - sliver-redis02
-#    networks:
-#      backend:
-#        ipv4_address: 172.16.238.211
-#    volumes:
-#      - ./sentinel-2/redis-sentinel.conf:/etc/redis/redis-sentinel.conf
-#      - ./sentinel-2/data:/data
-#    command: redis-sentinel /etc/redis/redis-sentinel.conf
-#
-#  sentinel-3:
-#    image: redis
-#    container_name: sentinel-3
-#    depends_on:
-#      - master-redis
-#      - sliver-redis01
-#      - sliver-redis02
-#    networks:
-#      backend:
-#        ipv4_address: 172.16.238.212
-#    volumes:
-#      - ./sentinel-3/redis-sentinel.conf:/etc/redis/redis-sentinel.conf
-#      - ./sentinel-3/data:/data
-#    command: redis-sentinel /etc/redis/redis-sentinel.conf
+  #  sentinel-1:
+  #    image: redis
+  #    container_name: sentinel-1
+  #    depends_on:
+  #      - master-redis
+  #      - sliver-redis01
+  #      - sliver-redis02
+  #    networks:
+  #      backend:
+  #        ipv4_address: 172.16.238.210
+  #    volumes:
+  #      - ./sentinel-1/redis-sentinel.conf:/etc/redis/redis-sentinel.conf
+  #      - ./sentinel-1/data:/data
+  #    command: redis-sentinel /etc/redis/redis-sentinel.conf
+  #
+  #  sentinel-2:
+  #    image: redis
+  #    container_name: sentinel-2
+  #    depends_on:
+  #      - master-redis
+  #      - sliver-redis01
+  #      - sliver-redis02
+  #    networks:
+  #      backend:
+  #        ipv4_address: 172.16.238.211
+  #    volumes:
+  #      - ./sentinel-2/redis-sentinel.conf:/etc/redis/redis-sentinel.conf
+  #      - ./sentinel-2/data:/data
+  #    command: redis-sentinel /etc/redis/redis-sentinel.conf
+  #
+  #  sentinel-3:
+  #    image: redis
+  #    container_name: sentinel-3
+  #    depends_on:
+  #      - master-redis
+  #      - sliver-redis01
+  #      - sliver-redis02
+  #    networks:
+  #      backend:
+  #        ipv4_address: 172.16.238.212
+  #    volumes:
+  #      - ./sentinel-3/redis-sentinel.conf:/etc/redis/redis-sentinel.conf
+  #      - ./sentinel-3/data:/data
+  #    command: redis-sentinel /etc/redis/redis-sentinel.conf
   #    command:
   #      - /bin/sh
   #      - -c
