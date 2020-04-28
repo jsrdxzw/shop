@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
  */
 @Async("rabbitmq_client_sender")
 @Component
+// TODO 使用rabbitMq的原生异步去操作
 public class RabbitMQSenderAsyncTask {
 
     public static final int INTERVAL_MINUTES = 1;
@@ -53,7 +54,6 @@ public class RabbitMQSenderAsyncTask {
                     .status(BrokerMessageStatus.SENDING.getCode())
                     .nextRetry(now.plusMinutes(INTERVAL_MINUTES))
                     .message(message).build();
-            System.out.println(brokerMessage);
             messageStoreService.insert(brokerMessage);
         }
         // 真正开始发送消息

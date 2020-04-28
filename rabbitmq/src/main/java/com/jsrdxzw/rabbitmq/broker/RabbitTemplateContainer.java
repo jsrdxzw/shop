@@ -5,6 +5,7 @@ import com.jsrdxzw.rabbitmq.api.MessageType;
 import com.jsrdxzw.rabbitmq.api.RabbitMessageConvert;
 import com.jsrdxzw.rabbitmq.service.MessageStoreService;
 import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -28,7 +29,7 @@ import static com.jsrdxzw.rabbitmq.api.MessageType.RAPID;
  * @date 2020/04/05
  */
 @Component
-public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
+public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnCallback {
     private final Map<String, RabbitTemplate> rabbitTemplateMap = new ConcurrentHashMap<>();
 
     @Autowired
@@ -54,6 +55,8 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
         rabbitTemplate.setMessageConverter(rabbitMessageConvert);
         if (MessageType.fromName(message.getMessageType().name()) != RAPID) {
             rabbitTemplate.setConfirmCallback(this);
+            rabbitTemplate.setReturnCallback(this);
+            rabbitTemplate.setMandatory(true);
         } else {
             rabbitTemplate.containerAckMode(AcknowledgeMode.AUTO);
         }
@@ -78,8 +81,13 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
             }
             System.out.println("send message is ok messageId:" + messageId + " time:" + sendTime);
         } else {
-            // 有可能MQ已经满了
+            // 有可能MQ已经满了,或者exchange找不到
             System.out.println("send error");
         }
+    }
+
+    @Override
+    public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        System.out.println("发送返回了。。");
     }
 }

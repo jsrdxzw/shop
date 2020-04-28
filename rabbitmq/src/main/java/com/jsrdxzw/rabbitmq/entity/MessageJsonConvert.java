@@ -14,9 +14,7 @@ import javax.persistence.Converter;
 public class MessageJsonConvert implements AttributeConverter<MessageHolder.Message, String> {
     @Override
     public String convertToDatabaseColumn(MessageHolder.Message message) {
-        String s = ProtoUtils.toJson(message);
-        System.out.println("here" + s);
-        return s;
+        return ProtoUtils.toJson(message);
     }
 
     @Override

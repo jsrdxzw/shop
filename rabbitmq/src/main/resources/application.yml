@@ -8,7 +8,7 @@ spring:
     hibernate:
       ddl-auto: update
     database: mysql
-    show-sql: true
+    show-sql: false
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   rabbitmq:
     addresses: localhost:5672
@@ -17,8 +17,17 @@ spring:
     virtual-host: /
     connection-timeout: 15000
     # 启用消息确认模式, 添加用于ack的唯一标记
-    publisher-confirm-type: correlated
+    #    publisher-confirm-type: correlated
+    publisher-returns: true
     # 表示消费者消费成功需要手工ack
+    template:
+      mandatory: true
+      retry:
+        enabled: true
+        initial-interval: 1000
+        max-attempts: 3
+        max-interval: 10000
+        multiplier: 1
     listener:
       simple:
         acknowledge-mode: manual
@@ -26,3 +35,4 @@ spring:
         max-concurrency: 10
         # 默认一条条消费
         prefetch: 1
+    publisher-confirms: true

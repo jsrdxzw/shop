@@ -38,15 +38,15 @@ public class RabbitmqApplicationTest {
     }
 
     @Test
-    public void test_send_error() {
+    public void test_send_error() throws InterruptedException {
         Map<String, String> map = new HashMap<>();
-        map.put("name", "jsrdxzw2");
+        map.put("name", "jsrdxbt");
         MessageHolder.Message message = MessageHolder.Message.newBuilder()
                 .setMessageId(UUID.randomUUID().toString().replaceAll("-", ""))
                 .setDelayMills(5000)
                 .setMessageType(MessageHolder.MessageType.RELIANT)
-                .setTopic("exchange-2")
-                .setRoutingKey("springboot.jsrdxzw")
+                .setTopic("exchange-1")
+                .setRoutingKey("aeqew.123")
                 .putAllAttributes(map)
                 .build();
         producerClient.send(message);

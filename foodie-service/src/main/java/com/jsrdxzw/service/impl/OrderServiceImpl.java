@@ -56,6 +56,7 @@ public class OrderServiceImpl implements OrderService {
         String itemSpecIds = submitOrderBO.getItemSpecIds();
         Integer payMethod = submitOrderBO.getPayMethod();
         String leftMsg = submitOrderBO.getLeftMsg();
+        // 邮费设置为0
         int postAmount = 0;
 
         UserAddress address = addressService.queryUserAddress(userId, addressId);

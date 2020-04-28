@@ -35,7 +35,7 @@
 #volumes:
 #  html:
 
-version: "3"
+version: "3.1"
 
 services:
   master-mysql:

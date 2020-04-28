@@ -12,6 +12,10 @@ import com.jsrdxzw.vo.CommentLevelCountsVO;
 import com.jsrdxzw.vo.ItemCommentVO;
 import com.jsrdxzw.vo.ShopCartVO;
 import com.jsrdxzw.vo.searchItemsVO;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +25,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: xuzhiwei
  * @Date: 2019/11/10
  * @Description:
  */
+@Slf4j
 @Service
 public class ItemServiceImpl extends BaseService implements ItemService {
 
@@ -36,6 +42,9 @@ public class ItemServiceImpl extends BaseService implements ItemService {
     private final ItemsParamMapper itemsParamMapper;
     private final ItemsCommentsMapper itemsCommentsMapper;
     private final ItemsMapperCustom itemsMapperCustom;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     public ItemServiceImpl(ItemsMapper itemsMapper, ItemsImgMapper itemsImgMapper, ItemsSpecMapper itemsSpecMapper, ItemsParamMapper itemsParamMapper, ItemsCommentsMapper itemsCommentsMapper, ItemsMapperCustom itemsMapperCustom) {
         this.itemsMapper = itemsMapper;
@@ -168,11 +177,21 @@ public class ItemServiceImpl extends BaseService implements ItemService {
         // 防止库存会成为负数的问题
         // synchronized 不推荐使用，集群下无用，性能不好
         // 锁数据库，不推荐，性能地下
-        // 分布式锁 OK zookeeper redis
-        // SQL语句判断更新
-        int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
-        if (result != 1) {
-            throw new RuntimeException("库存不足, 订单创建失败");
+        // 分布式锁 OK zookeeper redis 数据库
+        // SQL语句判断更新,适合并发小的情况
+        RLock lock = redissonClient.getLock("item_lock" + ":" + specId);
+        lock.lock(5, TimeUnit.SECONDS);
+        try {
+            int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
+            if (result != 1) {
+                // 由于在一个事务中，所以发生异常会回滚
+                throw new RuntimeException("库存不足, 订单创建失败");
+            }
+        } catch (Exception e) {
+            log.error("decreaseItemSpecStock error:{}", e);
+            throw e;
+        } finally {
+            lock.unlock();
         }
     }
 
