@@ -15,16 +15,19 @@ import com.jsrdxzw.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: xuzhiwei
@@ -40,15 +43,61 @@ public class OrdersController extends BaseController {
     private final RestTemplate restTemplate;
     private final RedisOperator redisOperator;
 
+    @Autowired
+    private RedissonClient redissonClient;
+
     public OrdersController(OrderService orderService, RestTemplate restTemplate, RedisOperator redisOperator) {
         this.orderService = orderService;
         this.restTemplate = restTemplate;
         this.redisOperator = redisOperator;
     }
 
+    @ApiOperation(value = "获取订单token", notes = "获取订单token", httpMethod = "GET")
+    @GetMapping("/getOrderToken")
+    public JSONResult getOrderToken(HttpSession session) {
+        String token = UUID.randomUUID().toString();
+        // 一个浏览器对应一个sessionID，其实就是JSESSIONID
+        redisOperator.set("ORDER_TOKEN_" + session.getId(), token, 600);
+        return JSONResult.ok(session.getId());
+    }
+
+    /**
+     * 防止重复下单，需要做接口幂等性处理
+     *
+     * @param submitOrderBO
+     * @param request
+     * @param response
+     * @return
+     */
     @ApiOperation(value = "用户下单", notes = "用户下单", httpMethod = "POST")
     @PostMapping("/create")
     public JSONResult create(@RequestBody SubmitOrderBO submitOrderBO, HttpServletRequest request, HttpServletResponse response) {
+
+        // 接口幂等性，防止多次提交
+        String orderTokenKey = "ORDER_TOKEN_" + request.getSession().getId();
+        String lockKey = "ORDER_LOCK_" + request.getSession().getId();
+        // 为了防止一个订单多个窗口提交形成并发问题，需要加锁
+        RLock lock = redissonClient.getLock(lockKey);
+        lock.lock();
+        // 一直会等待
+        lock.lock(30, TimeUnit.SECONDS);
+
+        try {
+            String orderToken = redisOperator.get(orderTokenKey);
+            if (StringUtils.isBlank(orderToken)) {
+                return JSONResult.errorMsg("orderToken不存在");
+            }
+            if (!orderToken.equals(submitOrderBO.getToken())) {
+                return JSONResult.errorMsg("orderToken不正确");
+            }
+
+            // 第一次成功，要删除token
+            redisOperator.del(orderTokenKey);
+        } finally {
+            lock.unlock();
+        }
+
+        //订单逻辑..
         if (!PayMethod.isValidatePay(submitOrderBO.getPayMethod())) {
             return JSONResult.errorMsg("支付方法不支持");
         }

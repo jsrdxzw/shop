@@ -445,7 +445,8 @@
             city: '北京',
             district: '东城区',
             cityArr: [],
-            districtArr: []
+            districtArr: [],
+            token: ""
         },
 
         watch: {
@@ -480,6 +481,8 @@
 
             // 渲染地址信息
             this.renderUserAddressList();
+
+            this.getOrderToken();
         },
         methods: {
             goUserCenter() {
@@ -536,6 +539,7 @@
 
                 const userInfo = this.userInfo;
                 const serverUrl = app.serverUrl;
+                const token = this.token
                 axios.defaults.withCredentials = true;
                 axios.post(
                     serverUrl + '/orders/create',
@@ -545,6 +549,7 @@
                         "addressId": choosedAddressId,
                         "payMethod": choosedPayMethod,
                         "leftMsg": orderRemarker,
+                        "token": token
                     },
                     {
                         headers: {
@@ -840,6 +845,22 @@
                 // 设置更新地址的id为空
                 this.updatedAddressId = "";
                 this.flushAddressForm();
+            },
+            getOrderToken() {
+                const serverUrl = app.serverUrl;
+                axios.defaults.withCredentials = true;
+                axios.get(serverUrl + '/orders/getOrderToken')
+                    .then(res => {
+                        if (res.data.status === 200) {
+                            this.token = res.data.data;
+                        } else if (res.data.status === 500) {
+                            alert(res.data.msg);
+                            console.log(res.data.msg);
+                        } else {
+                            alert(res.data.msg);
+                            console.log(res.data.msg);
+                        }
+                    });
             },
             renderUserAddressList() {
                 const userInfo = this.userInfo;

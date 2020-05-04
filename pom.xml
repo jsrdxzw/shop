@@ -34,6 +34,7 @@
         <module>protobuf</module>
         <module>executor-job</module>
         <module>kafka</module>
+        <module>ratelimiter</module>
     </modules>
 
     <properties>
