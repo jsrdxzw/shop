@@ -76,9 +76,8 @@ public class OrdersController extends BaseController {
         // 接口幂等性，防止多次提交
         String orderTokenKey = "ORDER_TOKEN_" + request.getSession().getId();
         String lockKey = "ORDER_LOCK_" + request.getSession().getId();
-        // 为了防止一个订单多个窗口提交形成并发问题，需要加锁
+        // 为了防止一个订单快速提交
         RLock lock = redissonClient.getLock(lockKey);
-        lock.lock();
         // 一直会等待
         lock.lock(30, TimeUnit.SECONDS);
 
