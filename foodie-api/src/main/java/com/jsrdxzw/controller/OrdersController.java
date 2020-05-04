@@ -78,7 +78,7 @@ public class OrdersController extends BaseController {
         String lockKey = "ORDER_LOCK_" + request.getSession().getId();
         // 为了防止一个订单快速提交
         RLock lock = redissonClient.getLock(lockKey);
-        // 一直会等待
+        // 一直会等待直到过期时间30s到，会自动释放锁
         lock.lock(30, TimeUnit.SECONDS);
 
         try {
@@ -89,7 +89,6 @@ public class OrdersController extends BaseController {
             if (!orderToken.equals(submitOrderBO.getToken())) {
                 return JSONResult.errorMsg("orderToken不正确");
             }
-
             // 第一次成功，要删除token
             redisOperator.del(orderTokenKey);
         } finally {
