@@ -76,11 +76,12 @@ public class OrdersController extends BaseController {
         // 接口幂等性，防止多次提交
         String orderTokenKey = "ORDER_TOKEN_" + request.getSession().getId();
         String lockKey = "ORDER_LOCK_" + request.getSession().getId();
-        // 为了防止一个订单快速提交
+
         RLock lock = redissonClient.getLock(lockKey);
         // 一直会等待直到过期时间30s到，会自动释放锁
         lock.lock(30, TimeUnit.SECONDS);
 
+        // 防止并发，这里需要锁住
         try {
             String orderToken = redisOperator.get(orderTokenKey);
             if (StringUtils.isBlank(orderToken)) {
