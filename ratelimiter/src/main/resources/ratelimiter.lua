@@ -7,7 +7,7 @@ local count = tonumber(redis.call('get', methodKey) or "0")
 if count + 1 > limit then
     return false
 else
-    redis.call('INCRBY',key,1)
-    redis.call('EXPIRE',key,1)
+    redis.call('INCRBY',methodKey,1)
+    redis.call('EXPIRE',methodKey,1)
     return true
 end

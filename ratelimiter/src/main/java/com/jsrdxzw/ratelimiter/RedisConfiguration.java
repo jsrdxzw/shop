@@ -1,5 +1,6 @@
 package com.jsrdxzw.ratelimiter;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -16,7 +17,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 public class RedisConfiguration {
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+    public RedisTemplate<String, String> redisTemplate(@Qualifier("redisConnectionFactory") RedisConnectionFactory factory) {
         return new StringRedisTemplate(factory);
     }
 
